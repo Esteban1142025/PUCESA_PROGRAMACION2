@@ -59,20 +59,40 @@
 # proporciona una estructura que define las propiedades y comportamientos de los objetos
 # que se van a crear a partir de ella
 # class Persona:
-#     def __init__(self,nombre,edad,ocupacion):
-#         self.nombre = nombre
-#         self.edad = edad
-#         self.ocupacion = ocupacion
-#     def descripcion(self):
-#         return f"Nombre: {self.nombre}, Edad:{self.edad}, Ocupacion:{self.ocupacion}"
+# el metodo __init__ es el constructor de la clase
+    # def __init__(self,nombre,edad,ocupacion):
+    #     self.nombre = nombre
+    #     self.edad = edad
+    #     self.ocupacion = ocupacion
 
-# #creamos los objetos de tipo persona
-# persona1 = Persona("Juan", 30, "Ingeniero")
-# persona2 = Persona("Maria", 25, "Dcotora")
+    # def descripcion(self):
+    #     return f"Nombre: {self.nombre}, Edad:{self.edad}, Ocupacion:{self.ocupacion}"
 
-# #Mostramos la descripcion de cada persona
-# print(persona1.descripcion())
-# print(persona2.descripcion())
+#metodo dinamico de los datos que estan abajo
+# while True:
+#     try:
+#         nombre = input("Ingrese el nombre de la persona o escriba 'salir' para salir: ")
+#         if nombre.lower() == 'salir':
+#             print("Saliendo del programa")
+#             break
+#         edad = int(input("Ingrese la edad de la persona: "))
+#         ocupacion = input("Ingrese la ocupacion de la persona: ")
+        
+#         persona = Persona(nombre, edad, ocupacion)
+#         print(persona.descripcion)
+
+#     except ValueError:
+#         print("Error: La edad debe ser un número")
+#     except KeyboardInterrupt:
+#         print("\nSaliendo del programa")
+
+#creamos los objetos de tipo persona
+#persona1 = Persona("Juan", 30, "Ingeniero")
+#persona2 = Persona("Maria", 25, "Doctora")
+
+#Mostramos la descripcion de cada persona
+#print(persona1.descripcion())
+#print(persona2.descripcion())
 
 
 # class Persona:
