@@ -1,5 +1,7 @@
-#cada que se invoque una clase se debe invocar todas sun funciones tambien
 #*************************************************************************************************************************
+#Explicacion: Se define una clase libro en la cual le doy los atributos titulo, autor y fecha
+#despues imprimo sus caracteristicas con un print
+#
 # class libro:
 #     def __init__(self,titulo,autor,fecha):
 #         self.titulo = titulo
@@ -9,11 +11,11 @@
 #     def caracteristicas(self):
 #         return f"El libro {self.titulo} fue escrito por {self.autor} en el año {self.fecha}"
 
-#funciona con cualquiera de las dos
-#libro1=libro("La mancha", "pepito", "2000")
-#print(libro("La mancha", "pepito", "2000").caracteristicas())
+# print(libro("La mancha", "pepito", "2000").caracteristicas())
 
 #*************************************************************************************************************************
+#
+#
 # class estudiante:
 #     def __init__(self,nombre,carrera,nota):
 #         self.nombre = nombre
@@ -30,11 +32,14 @@
 #             return f"El estudiante {self.nombre} de la carrera {self.carrera} a reprobado el curso"
 
 
-# estudiante1 = estudiante("Juanito", "Gastronomia", 6)
+# estudiante1 = estudiante("Juanito", "Gastronomia", 7)
 # print(estudiante1.semestre())
 # print(estudiante1.verificacion())
 
+
 #*************************************************************************************************************************
+#
+#
 # class Vehiculo:
 #     def moverse(self):
 #         return f"El vehiculo esta en movimiento"
@@ -49,9 +54,9 @@
 # auto = Auto()
 # print(auto.moverse())
 
-#que estructura usaste, orientada a objetos o estructurada? y porque
-
 #*************************************************************************************************************************
+#
+#
 # class Pajaro:
 #     def sonido(self):
 #         print("El Pajaro canta")
