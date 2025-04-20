@@ -1,75 +1,97 @@
 #*************************************************************************************************************************
 #Explicacion: Se define una clase libro en la cual le doy los atributos titulo, autor y fecha
-#despues imprimo sus caracteristicas con un print
-#
-# class libro:
-#     def __init__(self,titulo,autor,fecha):
-#         self.titulo = titulo
-#         self.autor = autor
-#         self.fecha = fecha
+#despues imprimo sus caracteristicas con un print.
 
-#     def caracteristicas(self):
-#         return f"El libro {self.titulo} fue escrito por {self.autor} en el año {self.fecha}"
+#Resolucion: El ejercicio se resolvio usando una clase y definiendo sus atributos y metodos.
 
-# print(libro("La mancha", "pepito", "2000").caracteristicas())
+#Estructura: Se utilizo la estructura orientada a objetos porque se trabajo con una clase solamente.
 
-#*************************************************************************************************************************
-#
-#
-# class estudiante:
-#     def __init__(self,nombre,carrera,nota):
-#         self.nombre = nombre
-#         self.carrera = carrera
-#         self.nota = nota
+class libro:
+    def __init__(self,titulo,autor,fecha):
+        self.titulo = titulo
+        self.autor = autor
+        self.fecha = fecha
 
-#     def semestre (self):
-#         return f"El estudiante {self.nombre} de la carrera {self.carrera} obtuvo la nota {self.nota}"
+    def caracteristicas(self):
+        return f"El libro {self.titulo} fue escrito por {self.autor} en el año {self.fecha}"
 
-#     def verificacion(self):
-#         if self.nota >= 7:
-#             return f"El estudiante {self.nombre} de la carrera {self.carrera} a aprobado el curso"
-#         else:
-#             return f"El estudiante {self.nombre} de la carrera {self.carrera} a reprobado el curso"
-
-
-# estudiante1 = estudiante("Juanito", "Gastronomia", 7)
-# print(estudiante1.semestre())
-# print(estudiante1.verificacion())
-
+print(libro("La mancha", "pepito", "2000").caracteristicas())
 
 #*************************************************************************************************************************
-#
-#
-# class Vehiculo:
-#     def moverse(self):
-#         return f"El vehiculo esta en movimiento"
+#Explicacion: Se define una clase estudiante a la cual le otorgo los atributos nombre, carrera y nota
+#despues se imprime su nota y se realiza una verificacion la cual define si pasa o reprueba el curso.
 
-# class Auto(Vehiculo):
-#     def moverse(self):
-#         return f"El auto se esta moviendo"
+#Resolucion: La clase estudiante guarda 3 datos (nombre, carrera y nota), la nota tenia que ser mayor o igual a 7
+#para aprobar el curso, se utiliza un if para realizar la verificacion, luego se imprime el resultado y los datos del estudiante.
 
-# vehiculo = Vehiculo()
-# print(vehiculo.moverse())
+#Estructura: Se utilizo en su mayoria la estructura orientada a objetos y solo en la verificacion
+#se utilizo la estructura estructurada.
 
-# auto = Auto()
-# print(auto.moverse())
+class estudiante:
+    def __init__(self,nombre,carrera,nota):
+        self.nombre = nombre
+        self.carrera = carrera
+        self.nota = nota
+
+    def semestre (self):
+        return f"El estudiante {self.nombre} de la carrera {self.carrera} obtuvo la nota {self.nota}"
+
+    def verificacion(self):
+        if self.nota >= 7:
+            return f"El estudiante {self.nombre} de la carrera {self.carrera} a aprobado el curso"
+        else:
+            return f"El estudiante {self.nombre} de la carrera {self.carrera} a reprobado el curso"
+
+
+estudiante1 = estudiante("Juanito", "Gastronomia", 7)
+print(estudiante1.semestre())
+print(estudiante1.verificacion())
+
 
 #*************************************************************************************************************************
-#
-#
-# class Pajaro:
-#     def sonido(self):
-#         print("El Pajaro canta")
+#Explicacion: Se define una clase vehiculo a la cual le doy un metodo "moverse", el mismo que sera
+#heredado por mi segunda clase Auto y lo sobreescribira.
 
-# class Gato:
-#     def sonido(self):
-#         print("El Gato maulla")
+#Resolucion: La clase vehiculo hereda a la clase Auto el metodo "moverse", lo modifica y posteriormente se imprime el resultado.
 
-# def ruido (animal):
-#     animal.sonido()
+#Estructura: Se utilizo la estructura orientada a objetos porque se hace uso de clases y herencia.
 
-# pajaro = Pajaro()
-# gato = Gato()
+class Vehiculo:
+    def moverse(self):
+        return f"El vehiculo esta en movimiento"
 
-# ruido(pajaro)
-# ruido(gato)
+class Auto(Vehiculo):
+    def moverse(self):
+        return f"El auto se esta moviendo"
+
+vehiculo = Vehiculo()
+print(vehiculo.moverse())
+
+auto = Auto()
+print(auto.moverse())
+
+#*************************************************************************************************************************
+#Explicacion: Se definen dos clases, Pajaro y Gato, con el metodo "sonido" que sera utilizado
+#de forma polimorfica por ambas de forma diferente.
+
+#Resolucion: Se utiliza el metodo "sonido" de forma polimorfica usando una funcion "ruido" que nos permitira
+#utilizar dicho metodo en ambas clases de manera distinta.
+
+#Estructura: Se utilizo la estructura otientada a objetos porque se hace uso de clases y polimorfismo.
+
+class Pajaro:
+    def sonido(self):
+        print("El Pajaro canta")
+
+class Gato:
+    def sonido(self):
+        print("El Gato maulla")
+
+def ruido (animal):
+    animal.sonido()
+
+pajaro = Pajaro()
+gato = Gato()
+
+ruido(pajaro)
+ruido(gato)
