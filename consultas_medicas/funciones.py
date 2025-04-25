@@ -26,9 +26,9 @@ def agregar_consulta():
             fecha = input("Ingrese la fecha de la consulta: ")
             diagnostico = input("Ingrese el diagnóstico: ")
             tratamiento = input("Ingrese el tratamiento: ")
-            paciente.agregar_fecha(fecha)
-            paciente.agregar_diagnostico(diagnostico)
-            paciente.agregar_tratamiento(tratamiento)
+            paciente.agregar_datos_consulta(fecha)
+            paciente.agregar_datos_consulta(diagnostico)
+            paciente.agregar_datos_consulta(tratamiento)
             
             datos = paciente.consulta_medica(fecha, diagnostico, tratamiento)
             paciente.agregar_datos_consulta(fecha, diagnostico, tratamiento)
