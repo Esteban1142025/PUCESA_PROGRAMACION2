@@ -7,7 +7,10 @@ def registrar_paciente():
     cedula = int(input("Ingrese la cédula del paciente: "))
     edad = int(input("Ingrese la edad del paciente: "))
     sangre = input("Ingrese el tipo de sangre del paciente: ")
-    paciente = Paciente(nombre,cedula,edad,sangre)
+    fecha = ''
+    diagnostico = ''
+    tratamiento = ''
+    paciente = Paciente(nombre,cedula,edad,sangre,fecha,diagnostico,tratamiento)
     pacientes.append(paciente)
     print("El paciente se ha registrado!!!")
 
