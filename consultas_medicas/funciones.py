@@ -38,4 +38,4 @@ def mostrar_todos():
     if not pacientes:
         print("No hay pacientes registrados.\n")
     for paciente in pacientes:
-        Paciente.mostrar_datos()
+        paciente.mostrar_datos()
