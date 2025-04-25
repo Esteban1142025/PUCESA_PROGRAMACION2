@@ -37,5 +37,5 @@ def agregar_consulta():
 def mostrar_todos():
     if not pacientes:
         print("No hay pacientes registrados.\n")
-    for i in pacientes:
-        i.mostrar_datos()
+    for paciente in pacientes:
+        Paciente.mostrar_datos()
