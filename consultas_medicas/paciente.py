@@ -1,10 +1,11 @@
 class Paciente:
+    cedula = int()
     def __init__(self,nombre,cedula,edad,sangre):
         self.nombre = nombre
         self.cedula = cedula
         self.edad = edad
         self.sangre = sangre
-        self.consulta = {}
+        self.consulta = []
 
     def consulta_medica(self, fecha, diagnostico, tratamiento):
         self.fecha = fecha
@@ -13,10 +14,15 @@ class Paciente:
         self.datos_consulta = []
         
     def agregar_datos_consulta(self, fecha, diagnostico, tratamiento):
+        """
         self.datos_consulta.append(fecha)
         self.datos_consulta.append(diagnostico)
         self.datos_consulta.append(tratamiento)
-
+        """
+        self.datos_consulta.append([
+            fecha, diagnostico, tratamiento
+        ])
+        
 
     def mostrar_datos(self):
         print(f"\nNombre: {self.nombre}")
