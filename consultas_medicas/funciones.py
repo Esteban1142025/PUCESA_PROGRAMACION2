@@ -11,6 +11,12 @@ def registrar_paciente():
     pacientes.append(paciente)
     print("El paciente se ha registrado!!!")
 
+def buscar_paciente(cedula):
+    for i in pacientes:
+        if i.cedula == cedula:
+            return i
+    return None
+
 def agregar_consulta():
     cedula = int(input("Ingrese la cédula del paciente: "))
     paciente = buscar_paciente(cedula)
@@ -26,12 +32,6 @@ def agregar_consulta():
             print("Parece que hubo un error!")
     else:
         print("Paciente no encontrado")
-
-def buscar_paciente(cedula):
-    for i in pacientes:
-        if i.cedula == cedula:
-            return i
-    return None
 
 def mostrar_todos():
     if not pacientes:
