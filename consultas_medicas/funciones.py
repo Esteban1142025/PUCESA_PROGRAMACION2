@@ -5,16 +5,17 @@ pacientes = []
 def registrar_paciente():
     nombre = input("Ingrese el nombre del paciente: ")
     cedula = int(input("Ingrese la cédula del paciente: "))
-    edad = int(input("Ingrese la edad del paciente:"))
+    edad = int(input("Ingrese la edad del paciente: "))
     sangre = input("Ingrese el tipo de sangre del paciente: ")
     paciente = Paciente(nombre,cedula,edad,sangre)
     pacientes.append(paciente)
     print("El paciente se ha registrado!!!")
 
 def buscar_paciente(cedula):
-    for i in pacientes:
-        if i.cedula == cedula:
-            return i
+    cedula = int(input("Ingrese la cédula del paciente: "))
+    for paciente in pacientes:
+        if paciente.cedula == cedula:
+            return paciente
     return None
 
 def agregar_consulta():
@@ -28,7 +29,7 @@ def agregar_consulta():
             paciente.agregar_fecha(fecha)
             paciente.agregar_diagnostico(diagnostico)
             paciente.agregar_tratamiento(tratamiento)
-        except Exception:
+        except:
             print("Parece que hubo un error!")
     else:
         print("Paciente no encontrado")

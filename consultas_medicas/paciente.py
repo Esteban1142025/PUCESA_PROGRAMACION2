@@ -1,10 +1,10 @@
 class Paciente:
-    def __init__(self,nombre,cedula,edad,sangre):
+    def __init__(self,nombre,cedula,edad,sangre,consulta):
         self.nombre = nombre
         self.cedula = cedula
         self.edad = edad
         self.sangre = sangre
-        self.consulta = {}
+        self.consulta = consulta
 
     def agregar_consulta (self, fecha, diagnostico, tratamiento):
         self.consulta = {
