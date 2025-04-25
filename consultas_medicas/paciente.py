@@ -1,5 +1,7 @@
 class Paciente:
     cedula = int()
+    datos_consulta = []
+    
     def __init__(self,nombre,cedula,edad,sangre):
         self.nombre = nombre
         self.cedula = cedula

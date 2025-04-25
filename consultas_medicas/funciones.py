@@ -17,16 +17,16 @@ def buscar_paciente():
         if paciente.cedula == cedula:
             print(paciente.mostrar_datos())
             return paciente
+    return None
 
 def agregar_consulta():
-    #cedula = int(input("Ingrese la cédula del paciente: "))
     paciente = buscar_paciente()
     if paciente:
             fecha = input("Ingrese la fecha de la consulta: ")
             diagnostico = input("Ingrese el diagnóstico: ")
             tratamiento = input("Ingrese el tratamiento: ")
             paciente.agregar_datos_consulta(fecha,diagnostico,tratamiento)
-            
+
             datos = paciente.consulta_medica(fecha, diagnostico, tratamiento)
             paciente.agregar_datos_consulta(fecha, diagnostico, tratamiento)
             pacientes.append(datos)
