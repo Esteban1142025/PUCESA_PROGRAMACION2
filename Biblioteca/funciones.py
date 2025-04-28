@@ -24,3 +24,4 @@ def mostrar_biblioteca():
         print("No hay libros registrados")
     for i in libros:
         i.datos_libro()
+        print("\n")
