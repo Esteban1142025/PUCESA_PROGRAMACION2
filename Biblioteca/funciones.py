@@ -8,8 +8,7 @@ def registrar_libro():
     autor = input("Ingrese el autor del libro: ")
     ISBN = int(input("Ingrese el ISBN del libro: "))
     genero = input("Ingrese el genero del libro: ")
-    prestamos = ''
-    libro = book(titulo,autor,ISBN,genero,prestamos)
+    libro = book(titulo,autor,ISBN,genero)
     libros.append(libro)
     print("El libro se ha registrado!")
 
@@ -18,12 +17,11 @@ def registrar_prestamo():
         print("No hay libros registrados")
     else:
         ISBN = int(input("Ingrese el codigo del libro a prestar: "))
-        for libro in prestamos:
+        for libro in libros:
             if libro.ISBN == ISBN:
                 persona = input("Ingrese el nombre del lector: ")
                 prestamos.append(persona)
-                return prestamos
-        print("El prestamo se ha registrado")
+            print("El prestamo se ha registrado")
 
 def buscar_libro():
     if not libros:
