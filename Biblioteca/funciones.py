@@ -1,6 +1,6 @@
 from libro import book
 
-prestamos = {}
+prestamos = []
 libros = []
 
 def registrar_libro():
@@ -11,6 +11,16 @@ def registrar_libro():
     libro = book(titulo,autor,ISBN,genero)
     libros.append(libro)
     print("El libro se ha registrado!")
+
+def registrar_prestamo():
+    if not libros:
+        print("No hay libros registrados")
+    else:
+        ISBN = int(input("Ingrese el codigo del libro a prestar: "))
+        for libro in libros:
+            if libro.ISBN == ISBN:
+                persona = input("Ingrese el nombre del lector")
+                prestamos.append(persona)
 
 def buscar_libro():
     if not libros:

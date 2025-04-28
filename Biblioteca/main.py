@@ -1,4 +1,4 @@
-from funciones import registrar_libro, buscar_libro, mostrar_biblioteca
+from funciones import registrar_libro, registrar_prestamo, buscar_libro, mostrar_biblioteca
 
 def menu_principal():
     while True:
@@ -15,7 +15,7 @@ def menu_principal():
         if opcion == 1:
             registrar_libro()
         elif opcion == 2:
-            ""
+            registrar_prestamo()
         elif opcion == 3:
             buscar_libro()
         elif opcion == 4:
