@@ -17,7 +17,7 @@ def registrar_prestamo():
         print("No hay libros registrados")
     else:
         ISBN = int(input("Ingrese el codigo del libro a prestar: "))
-        for libro in libros:
+        for libro in prestamos:
             if libro.ISBN == ISBN:
                 persona = input("Ingrese el nombre del lector: ")
                 prestamos.append(persona)

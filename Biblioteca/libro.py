@@ -1,6 +1,6 @@
 class book:
-    ISBN = int()
-    prestamos = []
+    # ISBN = int()
+    # prestamos = []
         
     def __init__(self,titulo,autor,ISBN,genero):
         self.titulo = titulo
