@@ -18,8 +18,7 @@ def buscar_libro():
         if libro.ISBN == ISBN:
             print(libro.datos_libro())
             return book
-    return None
 
 def mostrar_biblioteca():
-    for libros in libros:
+    for i in libros:
         print(f"{book.titulo}\n")
