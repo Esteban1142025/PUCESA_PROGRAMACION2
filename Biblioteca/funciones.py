@@ -20,5 +20,7 @@ def buscar_libro():
             return book
 
 def mostrar_biblioteca():
+    if not libros:
+        print("No hay libros registrados")
     for i in libros:
-        print(f"{i}\n")
+        i.datos_libro()
