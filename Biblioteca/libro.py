@@ -4,14 +4,12 @@ class book:
         self.autor = autor
         self.ISBN = ISBN
         self.genero = genero
-        self.prestamos = []
 
     def datos_libro(self):
         print(f"Titulo: {self.titulo}")
         print(f"Autor: {self.autor}")
         print(f"ISBN: {self.ISBN}")
         print(f"Genero: {self.genero}")
-        print(f"Listado de prestamos: {self.prestamos}")
 
 
 
