@@ -6,11 +6,7 @@ libros = []
 def registrar_libro():
     titulo = input("Ingrese el titulo del libro: ")
     autor = input("Ingrese el autor del libro: ")
-    while ISBN not in libros:
-        ISBN = int(input("Ingrese el ISBN del libro: "))
-        break
-    else:
-        print("El codigo ya existe, intente nuevamente")
+    ISBN = int(input("Ingrese el ISBN del libro: "))
     genero = input("Ingrese el genero del libro: ")
     libro = book(titulo,autor,ISBN,genero)
     libros.append(libro)
