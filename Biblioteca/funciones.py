@@ -8,7 +8,7 @@ def registrar_libro():
     autor = input("Ingrese el autor del libro: ")
     ISBN = int(input("Ingrese el ISBN del libro: "))
     genero = input("Ingrese el genero del libro: ")
-    libro = book(titulo,autor,ISBN,genero)
+    libro = book(titulo,autor,ISBN,genero,prestamos)
     libros.append(libro)
     print("El libro se ha registrado!")
 
