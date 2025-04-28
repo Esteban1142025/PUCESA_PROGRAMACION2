@@ -21,7 +21,8 @@ def registrar_prestamo():
             if libro.ISBN == ISBN:
                 persona = input("Ingrese el nombre del lector: ")
                 prestamos.append(persona)
-                return prestamos
+                return persona
+        print("El prestamo se ha registrado")
 
 def buscar_libro():
     if not libros:
