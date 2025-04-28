@@ -21,4 +21,4 @@ def buscar_libro():
 
 def mostrar_biblioteca():
     for i in libros:
-        print(f"{book.titulo}\n")
+        print(f"{i}\n")
