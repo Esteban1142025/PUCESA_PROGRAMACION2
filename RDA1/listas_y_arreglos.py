@@ -64,4 +64,4 @@ def busqueda_lineal(lista, objetivo):
             return i #Devuelve el indice donde se encontro
     return -1 #Devuelve este valor en caso de no encontrarlo
 
-busqueda_lineal([1, 2, 3, 4, 5], 3) #Devuelve 2
+print(busqueda_lineal([1, 2, 3, 4, 5], 3)) #Devuelve 2
