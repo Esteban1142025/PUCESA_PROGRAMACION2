@@ -1,8 +1,8 @@
 import array
 #remove solo elimina un UNICO elemento repetido
-lista = [1, 5, 5, 2]
-lista.remove(5)
-print(lista)
+# lista = [1, 5, 5, 2]
+# lista.remove(5)
+# print(lista)
 
 #con un bucle for se puede eliminar todos los elementos repetidos si los elementos se repiten mas de 2 veces
 lista2 = [1, 2, 2, 2, 2, 4, 5]
@@ -65,3 +65,11 @@ def busqueda_lineal(lista, objetivo):
     return -1 #Devuelve este valor en caso de no encontrarlo
 
 print(busqueda_lineal([1, 2, 3, 4, 5], 3)) #Devuelve 2
+
+lista = [5, 3, 8, 6, 2, 7, 4, 1]
+for i in range(len(lista)-1):
+    for j in range(len(lista)-1-i):
+        if lista[j] > lista[j+1]:
+            lista[j], lista[j+1] = lista[+1], lista[j]
+            print(lista[j], lista[j+1], end=" ")
+print(lista)
