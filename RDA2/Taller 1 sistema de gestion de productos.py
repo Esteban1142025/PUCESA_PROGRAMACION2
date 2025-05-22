@@ -4,9 +4,6 @@
 
 tienda = ["Leche Entera","Leche Descremada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua","Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco","Cereal","Cepillo de dientes"]
 
-comparacion_L = 0
-encontrar_L = False
-
 while True:
     print("""
         [&][&][&][&] Tiendita "Ahorros" [&][&][&][&]
@@ -25,7 +22,10 @@ while True:
         Ingrese 5 para salir del Catalogo
         """)
 
-    buscar = input("Ingrese el nombre del producto que desea buscar: ").lower()
+    buscar = input("Ingrese el nombre del producto que desea buscar: ").lower().strip()
+    
+    comparacion_L = 0
+    encontrar_L = False
     
     if buscar == "5":
         break
@@ -33,10 +33,9 @@ while True:
     else:
         for i, producto in enumerate(tienda):
             comparacion_L += 1
-        if producto.lower() == buscar:
-            print(f"El producto se encontro en la posicion {i}.")
-            encontrar_L = True
-            break
+            if producto.lower() == buscar:
+                print(f"El producto se encontro en la posicion {i}.")
+                encontrar_L = True
 
         if not encontrar_L:
             print("El producto no se ha encontrado.")
