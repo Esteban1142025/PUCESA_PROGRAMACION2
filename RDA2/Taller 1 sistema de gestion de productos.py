@@ -24,13 +24,16 @@ while True:
 
     buscar = input("Ingrese el nombre del producto que desea buscar: ").lower().strip()
     
-    comparacion_L = 0
-    encontrar_L = False
+    
     
     if buscar == "5":
         break
     
     else:
+    #Busqueda Lineal
+        comparacion_L = 0
+        encontrar_L = False
+    
         for i, producto in enumerate(tienda):
             comparacion_L += 1
             if producto.lower() == buscar:
@@ -40,6 +43,9 @@ while True:
         if not encontrar_L:
             print("El producto no se ha encontrado.")
 
-        print(f"Comparaciones realizadas: {comparacion_L}")
+    print(f"Comparaciones realizadas: {comparacion_L}")
 
-
+    #Busqueda Binaria
+    tienda_organizada = sorted(tienda, key=lambda x: x.lower())
+    comparacion_B = 0
+    
