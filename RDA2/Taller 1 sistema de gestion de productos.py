@@ -1,11 +1,16 @@
-#Busqueda Lineal: Es un algoritmo de busqueda el cual buscara el elemento en la lista de forma secuencial hasta encontrarlo
-#Busqueda Binaria: Es un algoritmo de busqueda mas complejo el cual dividira la lista en mitades hasta encontrar el elemento, este tipo de lista debe estar ordenada para poder funcionar 
-#La busqueda lineal es efectiva para listas pequeñas y desordenadas, mientras que la busqueda binaria es aplicada para listas mucho mas grandes en donde sus datos deben estar ordenados
+#Busqueda Lineal: Es un algoritmo de busqueda el cual buscara el elemento en la lista de forma secuencial hasta encontrarlo.
 
-tienda = ["Leche Entera","Leche Descremada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua","Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco","Cereal","Cepillo de dientes"]
-comparacion_L = 0
-encontrar_L = False
-comparacion_B = 0
+#Busqueda Binaria: Es un algoritmo de busqueda mas complejo el cual dividira la lista a la mitad varias veces hasta 
+#encontrar el elemento buscado, este tipo de lista debe estar ordenada para poder funcionar de forma correcta.
+
+#La busqueda lineal es efectiva para listas pequeñas y desordenadas donde se necesita un analisis rapido y simple, 
+#mientras que la busqueda binaria es aplicada para listas mucho mas grandes ya que puede manejar con mayor facilidad 
+#grandes cantidades de datos, ademas sus datos deben estar ordenados para poder funcionar de forma correcta.
+
+tienda = ["Leche Entera","Leche Descremada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua",
+        "Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco",
+        "Cereal","Cepillo de dientes"]
+
 while True:
     print("""
         [&][&][&][&] Tiendita "Ahorros" [&][&][&][&]
@@ -26,19 +31,24 @@ while True:
 
     buscar = input("Ingrese el nombre del producto que desea buscar: ").lower().strip()
     
-    
-    
     if buscar == "5":
         break
     
+    if buscar == "":
+        print("Error!... No ha ingresado ningun producto")
+        print("Intentelo nuevamente")
+    
     else:
     #Busqueda Lineal
+        comparacion_L = 0
+        encontrar_L = False
+    
         for i, producto in enumerate(tienda):
             comparacion_L += 1
             if producto.lower() == buscar:
                 print(f"El producto se encontro usando BUSQUEDA LINEAL en la posicion {i}.")
                 encontrar_L = True
-
+            break
         if not encontrar_L:
             print("El producto no se ha encontrado.")
 
@@ -46,7 +56,7 @@ while True:
 
     #Busqueda Binaria
         tienda_ordenada = sorted(tienda, key=lambda x: x.lower())
-        
+        comparacion_B = 0
         inicio = 0
         fin = len(tienda_ordenada) - 1
         encontrar_B = False
@@ -68,4 +78,4 @@ while True:
         if not encontrar_B:
             print("El producto no se ha encontrado.")
 
-        print(f"Se realizaron {comparacion_L} comparaciones")
+        print(f"Se realizaron {comparacion_B} comparaciones")
