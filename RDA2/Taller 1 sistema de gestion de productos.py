@@ -32,7 +32,7 @@ while True:
     buscar = input("Ingrese el nombre del producto que desea buscar: ").lower().strip()
     
     if buscar == "5":
-        print("Gracias por visitar la tienda")
+        print('Gracias por visitar la Tiendita "Ahorros"')
         print("vuelva pronto!")
         break
     
@@ -54,7 +54,7 @@ while True:
         if not encontrar_L:
             print("El producto no se ha encontrado.")
 
-        print(f"Se realizaron {comparacion_L} comparaciones")
+        print(f"Se realizaron {comparacion_L} comparaciones\n")
 
     #Busqueda Binaria
         tienda_ordenada = sorted(tienda, key=lambda x: x.lower())
