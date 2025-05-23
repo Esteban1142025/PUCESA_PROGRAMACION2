@@ -7,7 +7,7 @@
 #mientras que la busqueda binaria es aplicada para listas mucho mas grandes ya que puede manejar con mayor facilidad 
 #grandes cantidades de datos, ademas sus datos deben estar ordenados para poder funcionar de forma correcta.
 
-tienda = ["Leche Entera","Limonada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua",
+tienda = ["Leche Entera","Limonada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun","Agua",
         "Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco",
         "Cereal","Cepillo de dientes"]
 
@@ -21,10 +21,10 @@ while True:
         Azucar           |   Shampoo
         Sal              |   Mantequilla
         Aceite Vegetal   |   Queso
-        Galletas         |   Jabón
-        Atún enlatado    |   Refresco
+        Galletas         |   Jabon
+        Atun             |   Refresco
         Agua             |   Cereal
-        Papel Higiénico  |   Cepillo de dientes
+        Papel Higienico  |   Cepillo de dientes
         
         Ingrese 5 para salir del Catalogo
         """)
