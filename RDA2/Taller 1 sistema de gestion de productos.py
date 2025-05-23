@@ -3,7 +3,9 @@
 #La busqueda lineal es efectiva para listas pequeñas y desordenadas, mientras que la busqueda binaria es aplicada para listas mucho mas grandes en donde sus datos deben estar ordenados
 
 tienda = ["Leche Entera","Leche Descremada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua","Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco","Cereal","Cepillo de dientes"]
-
+comparacion_L = 0
+encontrar_L = False
+comparacion_B = 0
 while True:
     print("""
         [&][&][&][&] Tiendita "Ahorros" [&][&][&][&]
@@ -31,21 +33,39 @@ while True:
     
     else:
     #Busqueda Lineal
-        comparacion_L = 0
-        encontrar_L = False
-    
         for i, producto in enumerate(tienda):
             comparacion_L += 1
             if producto.lower() == buscar:
-                print(f"El producto se encontro en la posicion {i}.")
+                print(f"El producto se encontro usando BUSQUEDA LINEAL en la posicion {i}.")
                 encontrar_L = True
 
         if not encontrar_L:
             print("El producto no se ha encontrado.")
 
-    print(f"Comparaciones realizadas: {comparacion_L}")
+        print(f"Se realizaron {comparacion_L} comparaciones")
 
     #Busqueda Binaria
-    tienda_organizada = sorted(tienda, key=lambda x: x.lower())
-    comparacion_B = 0
-    
+        tienda_ordenada = sorted(tienda, key=lambda x: x.lower())
+        
+        inicio = 0
+        fin = len(tienda_ordenada) - 1
+        encontrar_B = False
+
+        while inicio <= fin:
+            comparacion_B += 1
+            medio = (inicio + fin) // 2
+            producto_medio = tienda_ordenada[medio].lower()
+            
+            if producto_medio == buscar:
+                print(f"El producto se encontro usando BUSQUEDA BINARIA en la posicion: {medio}")
+                encontrar_B = True
+                break
+            elif buscar < producto_medio:
+                fin = medio - 1
+            else:
+                inicio = medio + 1
+
+        if not encontrar_B:
+            print("El producto no se ha encontrado.")
+
+        print(f"Se realizaron {comparacion_L} comparaciones")
