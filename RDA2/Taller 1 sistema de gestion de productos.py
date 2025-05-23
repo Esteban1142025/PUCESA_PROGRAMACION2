@@ -32,6 +32,8 @@ while True:
     buscar = input("Ingrese el nombre del producto que desea buscar: ").lower().strip()
     
     if buscar == "5":
+        print("Gracias por visitar la tienda")
+        print("vuelva pronto!")
         break
     
     if buscar == "":
