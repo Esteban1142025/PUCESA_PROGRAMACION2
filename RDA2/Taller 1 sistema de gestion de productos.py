@@ -7,7 +7,7 @@
 #mientras que la busqueda binaria es aplicada para listas mucho mas grandes ya que puede manejar con mayor facilidad 
 #grandes cantidades de datos, ademas sus datos deben estar ordenados para poder funcionar de forma correcta.
 
-tienda = ["Leche Entera","Leche Descremada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua",
+tienda = ["Leche Entera","Limonada","Huevos","Azucar","Sal","Aceite Vegetal","Galletas","Atun enlatado","Agua",
         "Papel Higienico","Salsa de tomate","Mayonesa","Pasta Dental","Shampoo","Mantequilla","Queso","Jabon","Refresco",
         "Cereal","Cepillo de dientes"]
 
@@ -16,7 +16,7 @@ while True:
         [&][&][&][&] Tiendita "Ahorros" [&][&][&][&]
         Catalogo:   
         Leche Entera     |   Salsa de tomate
-        Leche Descremada |   Mayonesa
+        Limonada         |   Mayonesa
         Huevos           |   Pasta Dental
         Azucar           |   Shampoo
         Sal              |   Mantequilla
@@ -48,7 +48,7 @@ while True:
             if producto.lower() == buscar:
                 print(f"El producto se encontro usando BUSQUEDA LINEAL en la posicion {i}.")
                 encontrar_L = True
-            break
+                break
         if not encontrar_L:
             print("El producto no se ha encontrado.")
 
