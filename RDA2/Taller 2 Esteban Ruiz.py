@@ -39,11 +39,13 @@ def insertion_sort(dollars):
     global comp_is, inter_is
     # Recorremos desde el segundo elemento hasta el final
     for i in range(1, len(dollars)):
+        comp_is += 1
         actual = dollars[i]  # Elemento actual a insertar
         j = i - 1          # Posición anterior
 
         # Mientras haya elementos mayores que el actual, los movemos una posición a la derecha
         while j >= 0 and dollars[j] > actual:
+            inter_is += 1
             dollars[j + 1] = dollars[j]
             j -= 1
 
