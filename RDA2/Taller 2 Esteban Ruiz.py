@@ -1,8 +1,17 @@
-#
+#Explicacion de algoritmos:
+#Bubble sort: Realiza comparaciones entre elementos y los ordena intercambiando sus posiciones repetidamente
+#hasta que la lista quede ordenada
+#Insertion sort: Crea la lista ordenanda tomando elemento por elemento e insertandolo en la posicion correcta dentro de los
+#elementos ya ordenados
+#Selection sort: Busca el elemento mas pequeño e intercambia su posicion con el elemento que ocupa la primera
+#posicion de la lista en ese momento, luego va recorriendo la lista para encontrar el siguiente elemento mas pequeño y lo
+#intercambia con la siguiente posicion.
+#Metodo mas eficiente: La mejor opcion es selection sort
+#Explicacion: es que mejor rendimiento presenta a comparacion de los otros 2 ya que realiza intercambio de posiciones buscando
+#el valor minimo cada vez que recorre la lista
 
 
-#dollars = [1.3, 14.7, 19.8, 8.1, 18.9, 3.4, 15.6, 16.3, 9.4, 17.2]
-dollars = [3.4, 1.3, 8.1, 9.4, 14.7, 15.6, 16.3, 17.2, 18.9, 19.8]
+dollars = [1.3, 14.7, 19.8, 8.1, 18.9, 3.4, 15.6, 16.3, 9.4, 17.2]
 
 comp_bs = 0
 inter_bs = 0
