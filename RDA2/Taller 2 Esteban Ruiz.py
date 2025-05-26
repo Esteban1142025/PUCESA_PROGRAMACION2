@@ -17,7 +17,7 @@ def bubble_sort(dollars):
                 dollars[j], dollars[j + 1] = dollars[j + 1], dollars[j]
                 # Intercambio usando desempaquetado de tuplas
 
-    return dollars, comp, inter  # Retornamos la lista ordenada
+    return dollars # Retornamos la lista ordenada
 
 # Prueba
 print("Original:", dollars)
