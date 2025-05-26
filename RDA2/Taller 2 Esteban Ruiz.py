@@ -1,5 +1,5 @@
-dollars = [1.3, 14.7, 19.8, 8.1, 18.9, 3.4, 15.6, 16.3, 9.4, 17.2]
-#dollars = [1.3, 3.4, 8.1, 9.4, 14.7, 15.6, 16.3, 17.2, 18.9, 19.8]
+#dollars = [1.3, 14.7, 19.8, 8.1, 18.9, 3.4, 15.6, 16.3, 9.4, 17.2]
+dollars = [1.3, 3.4, 8.1, 9.4, 14.7, 15.6, 16.3, 17.2, 18.9, 19.8]
 
 comp_bs = 0
 inter_bs = 0
@@ -38,7 +38,7 @@ print("\n")
 def insertion_sort(dollars):
     global comp_is, inter_is
     # Recorremos desde el segundo elemento hasta el final
-    for i in range(1, len(dollars)):
+    for i in range(0, len(dollars)):
         comp_is += 1
         actual = dollars[i]  # Elemento actual a insertar
         j = i - 1          # Posición anterior
