@@ -1,3 +1,17 @@
+# 1. ¿Por qué es necesario ordenar antes de realizar la búsqueda binaria?
+# Porque en caso de no ordenar la lista, no es posible saber si el valor buscado está en la 
+# mitad izquierda o derecha, lo que hace inservible el algoritmo.
+#
+# 2. ¿Qué pasaría si usamos búsqueda binaria sin ordenar primero?
+# Si se aplica búsqueda binaria en una lista desordenada, el resultado será incorrecto o nulo. 
+#
+# 3. ¿Qué ventajas viste entre la búsqueda binaria y la búsqueda lineal?
+# Busqueda binaria: Mucho más rápida para listas grandes
+# Busqueda lineal: Recorre todos los elementos uno por uno
+# 4. ¿Cuál de los dos ordenamientos te pareció más intuitivo de implementar y por qué?
+# El ordenamiento lineal me parecio mas snecillo de implementar ya que no requiero de ordenar la lista
+# para poder trabajar con ella
+
 clientes = [
 ("Jorja",23.1),
 ("Federico",46.2),
@@ -54,6 +68,12 @@ def busqueda_nombre(lista_ordenada, objetivo):
 
     return -1, comp
 
+def busqueda_lineal(lista_desorden, objetivo):
+    for i in range(len(lista_desorden)):
+        if lista_desorden[i][0].lower() == objetivo.lower():
+            return i
+    return -1
+
 while True:
     print("""
         */\/\/\/\/\/\/\/\ Gestion de Clientes /\/\/\/\/\/\/\/\*
@@ -66,7 +86,7 @@ while True:
         5. Salir del programa
         """)
     
-    opcion = input("Ingrese una opcion: ")
+    opcion = input("Ingrese una opcion: ").strip()
     if opcion == "" or opcion not in ["1", "2", "3", "4", "5"]:
         print("Error!... No ha ingresado ninguna opcion o la opcion es incorrecta")
         print("Intentelo nuevamente")
@@ -85,19 +105,29 @@ while True:
                 print(i)
                 
         elif opcion == "3":
-            base_ordenada_N = ordenar_nombres(clientes.copy())
-            nombre = input("Ingrese el nombre del cliente a buscar: ")
-            pos, comp = busqueda_nombre(base_ordenada_N, nombre)
-            if pos != -1:
-                print(f"El cliente fue encontrado: {base_ordenada_N[pos]} en la posición {pos}")
-            else:
-                print("Cliente no encontrado.")
+            busqueda = input("Desea hacer la busqueda lineal (L) o binaria (B)?: ").lower().strip()
+            if busqueda == "B".lower():
+                base_ordenada_N = ordenar_nombres(clientes.copy())
+                nombre = input("Ingrese el nombre del cliente a buscar: ").strip()
+                pos, comp = busqueda_nombre(base_ordenada_N, nombre)
+                if pos != -1:
+                    print(f"El cliente fue encontrado: {base_ordenada_N[pos]} en la posición {pos}")
+                else:
+                    print("No se pudo encontrar al cliente")
 
-            print(f"Se realizaron {comp} comparaciones")
-            
+                print(f"Se realizaron {comp} comparaciones")
+            elif busqueda == "L".lower():
+                nombre = input("Ingrese el nombre del cliente a buscar: ").strip()
+                nombre_encontrado = busqueda_lineal(clientes, nombre)
+
+                if nombre_encontrado != -1:
+                    print(f"El cliente {nombre} se encuentra en la posicion: {nombre_encontrado}")
+                else:
+                    print("No se pudo encontrar al cliente")
+
         elif opcion == "4":
             print("<<<Agregando un nuevo cliente>>>")
-            cliente = input("Ingrese el nombre del nuevo cliente: ")
+            cliente = input("Ingrese el nombre del nuevo cliente: ").strip()
             saldo = float(input("Ingrese el saldo del nuevo cliente: "))
             clientes.append((cliente,saldo))
             print("Cliente agregado con exito!")
