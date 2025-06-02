@@ -29,7 +29,7 @@ for i in clientes:
     print(i,"\n")
 
 def ordenar_nombres(lista):
-    # Ordenamos los productos según su nombre (posición 0 de la tupla)
+
     for i in range(1, len(lista)):
         actual = lista[i]
         j = i - 1
@@ -44,7 +44,7 @@ def ordenar_saldo(lista):
     for i in range(n):
         min_idx = i
         for j in range(i + 1, n):
-            if lista[j][1] < lista[min_idx][1]:  # Comparamos por precio (índice 1)
+            if lista[j][1] < lista[min_idx][1]:
                 min_idx = j
         lista[i], lista[min_idx] = lista[min_idx], lista[i]
     return lista
