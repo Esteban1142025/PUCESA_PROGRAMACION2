@@ -33,12 +33,15 @@ while True:
     
     elif opcion == 3:
         if historial:
-            eliminada = historial.pop()
-            print("Volviste desde:", eliminada)
-            print("Página actual:", historial)
+            try:
+                eliminada = historial.pop()
+                print("Volviste desde:", eliminada)
+                print("Página actual:", historial[-1])
+            except IndexError:
+                print("No puedes volver, historial vacío.")
         else:
             print("No puedes volver, historial vacío.")
-            
+
     elif opcion == 4:
         if len(historial) == 0:
             print("El historial está vacío.")
