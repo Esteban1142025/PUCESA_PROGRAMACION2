@@ -47,6 +47,7 @@ while True:
             print("El historial está vacío.")
         else:
             print("Páginas restantes:", historial)
+
     elif opcion == 5:
         print("Finalizando programa...")
         break
