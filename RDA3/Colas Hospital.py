@@ -56,5 +56,6 @@ while not hospital.esta_vacia():
     print("\n")
     hospital.desencolar()
     print("Pacientes pendientes (Prioridad | Nombre): \n", hospital.mostrar_pendientes())
+    print("\______________________________________________________________________________________________________/")
     if hospital.esta_vacia():
         print("<<<La cola está vacía>>>")
