@@ -38,6 +38,7 @@ while True:
     elif opcion == 1:
         while True:
             print("""
+                <<<<<<<<BIENVENIDO AL GESTOR DE TAREAS>>>>>>>>
                 1. Ingresar una nueva tarea
                 2. Finalizar una tarea
                 3. Ver ultima tarea
@@ -59,14 +60,20 @@ while True:
                         break
 
             elif opcion == 2:
-                pila.terminar_tarea()
-                
+                try:
+                    pila.terminar_tarea()
+                except IndexError:
+                    print("Ya se han finalizado todas las tareas")
+
             elif opcion == 3:
                 pila.ver_ultima_tarea()
-
+            
             elif opcion == 4:
                 pila.tamaño()
 
             elif opcion == 5:
                 print("Finalizando programa...")
                 break
+    elif opcion == 2:
+        while True:
+            pass
