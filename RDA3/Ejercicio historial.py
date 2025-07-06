@@ -22,21 +22,17 @@ class HistorialNavegador:
     def atras(self):
         if self.actual and self.actual.anterior:
             self.actual = self.actual.anterior
-        else:
-            print("No hay página anterior.")
 
     def adelante(self):
         if self.actual and self.actual.siguiente:
             self.actual = self.actual.siguiente
-        else:
-            print("No hay página siguiente.")
 
     def mostrar_historial(self):
-        # Ir al inicio del historial
+        # aqui iremos al inicio del historial
         nodo = self.actual
         while nodo and nodo.anterior:
             nodo = nodo.anterior
-        # Imprimir desde el inicio hasta el final
+        # aqui se imprime desde el inicio hasta el final
         while nodo:
             if nodo == self.actual:
                 print(f">>> {nodo.dato} (estas aqui!)")
@@ -62,6 +58,7 @@ nav.atras()
 nav.atras()
 
 nav.visitar_pagina("stackoverflow.com")
+nav.visitar_pagina("Facebook.com")
 
 nav.mostrar_historial()
 nav.pagina_actual()
