@@ -1,3 +1,41 @@
+#<<<<Codigo para la cola de atencion>>>>
+
+class NodoSimple:
+    def __init__(self, persona):
+        self.persona = persona
+        self.siguiente = None
+
+class ColaAtencion:
+    def __init__(self):
+        self.inicio = None
+        self.fin = None
+
+    def insertar(self, persona):
+        nuevo = NodoSimple(persona)
+        if not self.inicio:
+            self.inicio = self.fin = nuevo
+        else:
+            self.fin.siguiente = nuevo
+            self.fin = nuevo
+
+    def eliminar(self):
+        if self.inicio:
+            print(f"Atendiendo a: {self.inicio.persona}")
+            self.inicio = self.inicio.siguiente
+            if not self.inicio:
+                self.fin = None
+
+
+    def mostrar(self):
+        actual = self.inicio
+        print("Cola de atención:")
+        while actual:
+            print(f"{actual.persona}")
+            actual = actual.siguiente
+
+
+#<<<<Codigo para el historial de navegacion>>>>>
+
 class NodoDoble:
     def __init__(self, dato):
         self.dato = dato
@@ -42,6 +80,25 @@ class HistorialNavegador:
         if self.actual:
             print(f"Página actual: {self.actual.dato}")
 
+
+# Simulacion para la cola de atencion
+print("---------------------------------------------------------------------------------------------------------")
+
+cola = ColaAtencion()
+cola.insertar("Persona 1")
+cola.insertar("Persona 2")
+cola.insertar("Persona 3")
+cola.insertar("Persona 4")
+cola.insertar("Persona 5")
+
+cola.mostrar()
+cola.eliminar()
+cola.eliminar()
+cola.mostrar()
+
+print("---------------------------------------------------------------------------------------------------------")
+
+# Simulacion para el historial de navegacion
 print("Historial de navegacion:")
 
 nav = HistorialNavegador()
@@ -58,3 +115,4 @@ nav.visitar_pagina("Facebook.com")
 
 nav.mostrar_historial()
 nav.pagina_actual()
+print("---------------------------------------------------------------------------------------------------------")
