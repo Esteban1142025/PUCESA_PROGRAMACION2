@@ -64,14 +64,20 @@ while True:
                 4) Reporte actual
                 5) Volver
                 """)
+
             opcion = int(input("Ingrese el numero de la funcionalidad que desea utilizar: "))
             if opcion not in [1,2,3,4,5]:
                 print("Error! Seleccione una opcion valida...")
             elif opcion == 1:
-                print("Ingrese los datos del paciente:\n")
-                Reporte.agregar_reporte(input("Ingrese el tipo de sintoma: "), input("Ingrese la observacion: "))
+                print(f"Ingrese los datos del paciente:\n")
+                if Reporte.actual:
+                    Reporte.agregar_reporte(input("Ingrese el tipo de sintoma: "), input("Ingrese la observacion: "))
+                else:
+                    Reporte.agregar_reporte(input("Ingrese el nombre del paciente: "), input("Ingrese el apellido del paciente: "))
             elif opcion == 2:
                 Reporte.eliminar_reporte()
+                print("Reporte eliminado!")
+                print("Se actualizara la lista de reportes medicos en el siguiente ingreso de datos...")
             elif opcion == 3:
                 Reporte.mostrar_reportes()
             elif opcion == 4:
