@@ -65,3 +65,4 @@ nav.visitar_pagina("Facebook.com")       # Visita otra pagina
 
 nav.mostrar_historial()  # Muestra todo el historial
 nav.pagina_actual()      # Muestra la pagina actual
+
