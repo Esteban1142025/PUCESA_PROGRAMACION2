@@ -40,6 +40,47 @@ class PilaReportes:
 
 Reporte = PilaReportes()
 
+
+
+#Simulacion de Evacuacion Escolar (Colas)
+# Clase EstudianteEvacuacion
+class EstudianteEvacuacion:
+    def __init__(self, nombre, aula):
+        self.nombre = nombre
+        self.aula = aula
+
+# Clase ColaEvacuacion
+class ColaEvacuacion:
+    def __init__(self):
+        pass  # Completa la implementación
+
+    def agregar_estudiante(self, nombre, aula):
+        pass
+
+    def atender_estudiante(self):
+        pass
+
+    def mostrar_en_espera(self):
+        pass
+
+# Pruebas aquí
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 while True:
     print("""
         <<<Sistema de Gestion Escolar de Emergencia>>>
