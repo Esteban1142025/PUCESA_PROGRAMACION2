@@ -51,4 +51,16 @@ class MasDatos (Datos):
 
 yo3 = MasDatos("Ingenieria en sistemas", "Esteban", "Cuarto Semestre", 1851025104,"Programacion IV y Base de Datos I")
 
-print(yo3.p_c_completa())
+# print(yo3.p_c_completa())
+
+class AunMasDatos(MasDatos):
+    def __init__(self, carrera, nombre, nivel, cedula, materias, hora):
+        super().__init__(carrera, nombre, nivel, cedula, materias)
+        self.hora = hora
+    
+    def p_c_c_completa(self):
+        return f"{self.p_c_completa()} y entro a las {self.hora}"
+
+yo4 = AunMasDatos("Ingenieria en sistemas", "Esteban", "Cuarto Semestre", 1851025104,"Programacion IV y Base de Datos I", "7 AM de la manaña")
+
+print(yo4.p_c_c_completa())
