@@ -62,4 +62,22 @@ print(hay_duplicados(con_duplicados))
 print(hay_duplicados(sin_duplicados))
 
 print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+print("\n")
 
+print("Reto de Optimización: ¡Mejora el Buscador de Duplicados!")
+print("""Misión: Vuelve al "Ejercicio 3". ¿Puedes pensar en una forma más eficiente (con menor complejidad Big O) 
+de resolver el mismo problema? Escribe una nueva función optimizada.""")
+def hay_duplicados_optimizado(lista):
+    elemento_visto = set()
+    for elemento in lista:
+        if elemento in elemento_visto:
+            return True
+        elemento_visto.add(elemento)
+    return False
+
+# --- Prueba tu función ---
+con_duplicados = [1, 2, 5, 2, 8]
+sin_duplicados = ["gato", "perro", "pez"]
+print(hay_duplicados_optimizado(con_duplicados))
+print(hay_duplicados_optimizado(sin_duplicados))
+print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
