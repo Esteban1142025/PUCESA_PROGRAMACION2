@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ACCESO DENEGADO - SECURITY SYSTEM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Importación de fuente estilo Terminal/Retro */
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        /* ---------------------------------------------------------
+        ESTILOS DE FONDO Y AMBIENTACIÓN
+           --------------------------------------------------------- */
+        body {
+            background-color: #0d0d0d;
+            /* Creación de efecto de rejilla (Grid) mediante gradientes */
+            background-image:
+                linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #ff3333; /* Color rojo de alerta */
+            font-family: 'VT323', monospace;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ---------------------------------------------------------
+        DISEÑO DE LA TARJETA DE ERROR (Cyberpunk Style)
+           --------------------------------------------------------- */
+        .error-card {
+            background: rgba(10, 0, 0, 0.9);
+            border: 4px solid #ff3333;
+            padding: 40px;
+            /* Efecto de resplandor neón rojo */
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4), inset 0 0 20px rgba(255, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            margin: auto;
+            /* Recorte angular para estética futurista */
+            clip-path: polygon(0 0, 100% 0,
+                    100% 85%, 95% 100%,
+                    5% 100%, 0 85%);
+        }
+
+        h1 {
+            font-size: 5rem;
+            margin: 0;
+            text-shadow: 4px 4px 0px #660000;
+            letter-spacing: 5px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid #ff3333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.5rem;
+            color: #ff8080;
+        }
+
+        /* ---------------------------------------------------------
+        BOTÓN DE RETORNO AL SISTEMA
+           --------------------------------------------------------- */
+        .btn-return {
+            background: transparent;
+            border: 2px solid #ff3333;
+            color: #ff3333;
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* Efecto Hover: Inversión de colores y brillo */
+        .btn-return:hover {
+            background: #ff3333;
+            color: #000;
+            box-shadow: 0 0 15px #ff3333;
+        }
+
+        .icon-lock {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="error-card">
+            <h1>403</h1>
+            <h2>ACCESO RESTRINGIDO</h2>
+            <p>> ERROR DE SEGURIDAD: NIVEL DE AUTORIZACIÓN INSUFICIENTE.</p>
+            <p>> SU RANGO ACTUAL NO PERMITE EL ACCESO A ESTOS SISTEMAS CRÍTICOS.</p>
+
+            <a href="{{ url_for('main.home') }}" class="btn-return">
+                << RETORNAR AL INICIO DE SESIÓN</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Mindustry Style</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
     <style>
+        /* Importación de fuente estilo consola retro */
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
         body {
+            /* Imagen de fondo dinámica con overlay oscuro */
             background: url("{{ url_for('static', filename='img/fondo_login.jpg') }}") no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;
             align-items: center;
-            /* Fuente pixelada estilo consola */
             font-family: 'VT323', monospace;
             margin: 0;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Overlay con textura de rejilla para simular el mapa de fondo */
+        /* Overlay de rejilla tecnológica (Scanlines/Grid) */
         body::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(20, 20, 25, 0.7);
             background-image: radial-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 0);
             background-size: 30px 30px;
@@ -35,18 +45,18 @@
             z-index: 2;
         }
 
-        /* El panel: Inspirado en los cuadros de diálogo de Mindustry */
+        /* Tarjeta de Interfaz: Estilo Bloque de Construcción */
         .mindustry-card {
-            background: #2d2d31; /* Gris oscuro industrial */
-            border: 4px solid #1a1a1c; /* Borde exterior grueso */
-            border-top: 4px solid #45454a; /* Simulación de relieve superior */
-            box-shadow: 0 0 0 4px #2d2d31, 10px 10px 0px rgba(0,0,0,0.5); /* Sombra sólida pixelada */
+            background: #2d2d31;
+            border: 4px solid #1a1a1c;
+            border-top: 4px solid #45454a; /* Efecto de relieve superior */
+            box-shadow: 0 0 0 4px #2d2d31, 10px 10px 0px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 400px;
             padding: 30px;
         }
 
-        /* Título en Naranja Cobre (Cobre/Energía de Mindustry) */
+        /* Título con color Cobre/Energía */
         .title-industrial {
             color: #f7ad3d;
             text-transform: uppercase;
@@ -60,16 +70,17 @@
             color: #d2d2d9;
             font-size: 1.4rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Inputs: Fondo oscuro, bordes cuadrados */
+        /* Inputs de Terminal */
         .form-control {
             background: #1a1a1c;
             border: 2px solid #45454a;
             color: #f7ad3d;
             font-family: 'VT323', monospace;
             font-size: 1.3rem;
-            border-radius: 0; /* Sin redondeado */
+            border-radius: 0;
             padding: 10px;
         }
 
@@ -81,7 +92,11 @@
             outline: 2px solid #f7ad3d;
         }
 
-        /* Botón: Estilo núcleo o bloque de energía */
+        .form-control::placeholder {
+            color: #45454a;
+        }
+
+        /* Botón de Acción Industrial */
         .btn-mindustry {
             background: #f7ad3d;
             border: none;
@@ -92,11 +107,7 @@
             border-radius: 0;
             padding: 10px;
             transition: all 0.1s;
-        }
-
-        .btn-mindustry:active {
-            border-bottom: 0px solid #8a5a1a;
-            transform: translateY(5px);
+            text-transform: uppercase;
         }
 
         .btn-mindustry:hover {
@@ -104,9 +115,14 @@
             color: #000;
         }
 
-        /* Link inferior */
+        .btn-mindustry:active {
+            border-bottom: 0px solid #8a5a1a;
+            transform: translateY(5px);
+        }
+
+        /* Enlaces de navegación de unidades */
         .link-register {
-            color: #84f491; /* Verde como los bloques de reparación */
+            color: #84f491; /* Verde reparación */
             text-decoration: none;
             font-size: 1.2rem;
         }
@@ -122,24 +138,25 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container d-flex justify-content-center">
         <div class="mindustry-card">
             <h2 class="title-industrial">[ ACCESO ]</h2>
-            
+
             <form action="/login_proceso" method="POST">
                 <div class="mb-4">
                     <label class="form-label">IDENTIFICADOR</label>
-                    <input type="text" name="username" class="form-control" placeholder="Escriba aquí..." required>
+                    <input type="text" name="username" class="form-control" placeholder="Escriba aquí..." required autocomplete="off">
                 </div>
-                
+
                 <div class="mb-5">
                     <label class="form-label">CLAVE DE ACCESO</label>
                     <input type="password" name="password" class="form-control" placeholder="••••••••" required>
                 </div>
-                
+
                 <button type="submit" class="btn btn-mindustry w-100 mb-4">DESPLEGAR UNIDAD</button>
-                
+
                 <div class="text-center">
                     <span class="text-secondary">¿Nueva unidad?</span>
                     <a href="{{ url_for('main.registro') }}" class="link-register ms-2">Registrarse</a>
@@ -147,5 +164,33 @@
             </form>
         </div>
     </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        // Manejo de mensajes Flash enviados por Flask
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        var msg = {{ message | tojson }};
+        Toastify({
+            text: msg,
+            duration: 4000,
+            gravity: "top",
+            position: "center",
+            stopOnFocus: true,
+            style: {
+                background: "#2d2d31",
+                border: "2px solid #ff4d4d", // Alerta roja estilo Mindustry
+                color: "#ff4d4d",
+                fontFamily: "'VT323', monospace",
+                fontSize: "1.3rem",
+                boxShadow: "10px 10px 0px rgba(0,0,0,0.5)"
+            },
+        }).showToast();
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </script>
 </body>
+
 </html>

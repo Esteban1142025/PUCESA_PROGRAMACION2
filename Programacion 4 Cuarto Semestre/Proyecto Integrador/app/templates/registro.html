@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Registro - System Alpha</title>
@@ -18,12 +19,13 @@
             color: #ffb84d;
         }
 
+        /* Efecto de post-procesamiento visual (Scanlines y distorsión de color) */
         body::after {
             content: " ";
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             background-size: 100% 2px, 3px 100%;
             pointer-events: none;
             z-index: 10;
@@ -34,6 +36,7 @@
             z-index: 5;
         }
 
+        /* Contenedor principal con forma geométrica de HUD */
         .hud-card {
             background: rgba(20, 15, 5, 0.85);
             border: 2px solid #ffb84d;
@@ -41,14 +44,15 @@
             width: 100%;
             max-width: 450px;
             padding: 40px;
-            box-shadow: inset 0 0 20px rgba(255, 184, 77, 0.2), 0 0 15px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 20px rgba(255, 184, 77, 0.2), 0 0 15px rgba(0, 0, 0, 0.8);
             position: relative;
         }
 
         .hud-card::before {
             content: "MINDUSTRY-CORP SYSTEM";
             position: absolute;
-            top: 10px; right: 20px;
+            top: 10px;
+            right: 20px;
             font-size: 0.8rem;
             color: #ff4d4d;
         }
@@ -131,6 +135,7 @@
             opacity: 0.5;
         }
 
+        /* Estilo para los mensajes de error inyectados por Flask */
         .system-error {
             color: #ff4d4d;
             text-align: center;
@@ -140,19 +145,21 @@
             padding: 5px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+
 <body>
     <div class="container d-flex justify-content-center">
         <div class="hud-card">
             <div class="text-center mb-2 arrows">>>> >>> >>></div>
             <h2 class="title-warning">NUEVO REGISTRO</h2>
-            
+
             <form action="{{ url_for('main.registro_proceso') }}" method="POST">
                 <div class="mb-3">
                     <label class="form-label">[ IDENTIFICADOR ]</label>
                     <input type="text" name="username" class="form-control" placeholder="USER_ID" required>
                 </div>
-                
+
                 <div class="mb-3">
                     <label class="form-label">[ CLAVE DE ACCESO ]</label>
                     <input type="password" name="password" class="form-control" placeholder="********" required>
@@ -160,11 +167,12 @@
 
                 <div class="mb-4">
                     <label class="form-label">[ CONFIRMAR CLAVE ]</label>
-                    <input type="password" name="confirm_password" class="form-control" placeholder="CONFIRM_KEY" required>
+                    <input type="password" name="confirm_password" class="form-control" placeholder="CONFIRM_KEY"
+                        required>
                 </div>
-                
+
                 <button type="submit" class="btn-execute">REGISTRAR UNIDAD</button>
-                
+
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         {% for message in messages %}
@@ -174,11 +182,41 @@
                 {% endwith %}
 
                 <div class="footer-links">
-                    <a href="{{ url_for('main.home') }}" class="link-back">< VOLVER AL HOST</a>
+                    <a href="{{ url_for('main.home') }}" class="link-back">
+                        < VOLVER AL HOST</a>
                 </div>
             </form>
-            <div class="text-center mt-3 arrows"><<< <<< <<<</div>
+            <div class="text-center mt-3 arrows">
+                <<< <<< <<<</div>
+            </div>
         </div>
-    </div>
+        
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script>
+            /* Script opcional de Toastify para duplicar la alerta en formato notificación flotante */
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            var msg = {{ message | tojson }};
+            Toastify({
+                text: "ERROR: " + msg,
+                duration: 4000,
+                gravity: "top",
+                position: "center",
+                stopOnFocus: true,
+                style: {
+                    background: "rgba(20, 15, 5, 0.95)",
+                    border: "1px solid #ff4d4d",
+                    color: "#ff4d4d",
+                    fontFamily: "'VT323', monospace",
+                    boxShadow: "0 0 15px rgba(255, 77, 77, 0.4)",
+                    fontSize: "1.2rem"
+                },
+            }).showToast();
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </script>
 </body>
+
 </html>

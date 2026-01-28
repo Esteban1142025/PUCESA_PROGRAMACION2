@@ -1,42 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <style>
-        body { background: #0a0a0a; color: #00ff00; font-family: 'Courier New', monospace; padding: 50px; }
-        .terminal-box { border: 1px solid #00ff00; padding: 20px; box-shadow: 0 0 15px rgba(0, 255, 0, 0.2); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #00ff00; padding: 10px; text-align: left; }
-        th { background: rgba(0, 255, 0, 0.1); }
-        
-        /* Estilos para los botones de Rango */
-        .btn-rank { text-decoration: none; padding: 3px 8px; border: 1px solid; margin-right: 5px; font-size: 0.8em; }
+        /* ---------------------------------------------------------
+        ESTILOS TIPO TERMINAL (GREEN CRT)
+           --------------------------------------------------------- */
+        body {
+            background: #0a0a0a;
+            color: #00ff00; /* Verde fósforo clásico */
+            font-family: 'Courier New', monospace;
+            padding: 50px;
+        }
+
+        .terminal-box {
+            border: 1px solid #00ff00;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+
+        /* Diseño de tabla industrial */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #00ff00;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        /* ---------------------------------------------------------
+        BOTONES DE RANGO Y ACCIONES
+           --------------------------------------------------------- */
+        .btn-rank {
+            text-decoration: none;
+            padding: 3px 8px;
+            border: 1px solid;
+            margin-right: 5px;
+            font-size: 0.8em;
+        }
+
+        /* Nivel 1 - Usuario Estándar */
         .rank-user { color: #888; border-color: #888; }
         .rank-user:hover { background: #888; color: #000; }
+
+        /* Nivel 2 - Ingeniero de Sistemas */
         .rank-ing { color: #0088ff; border-color: #0088ff; }
         .rank-ing:hover { background: #0088ff; color: #000; }
+
+        /* Nivel Admin - Gestión */
         .rank-admin { color: #ffaa00; border-color: #ffaa00; }
         .rank-admin:hover { background: #ffaa00; color: #000; }
 
-        .btn-delete { color: #ff0000; text-decoration: none; border: 1px solid #ff0000; padding: 5px; }
-        .btn-delete:hover { background: #ff0000; color: #000; }
-        .back { color: #00ff00; text-decoration: none; display: block; margin-bottom: 20px; }
-        
-        .flash-msg { background: rgba(0, 255, 0, 0.1); padding: 10px; border-left: 5px solid #00ff00; margin-bottom: 20px; }
+        /* Acción de eliminación crítica */
+        .btn-delete {
+            color: #ff0000;
+            text-decoration: none;
+            border: 1px solid #ff0000;
+            padding: 5px;
+        }
+
+        .btn-delete:hover {
+            background: #ff0000;
+            color: #000;
+        }
+
+        .back {
+            color: #00ff00;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 20px;
+        }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+
 <body>
     <div class="terminal-box">
-        <a href="{{ url_for('grafos.index') }}" class="back">< [ VOLVER AL MAPA ]</a>
-        
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="flash-msg">> {{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
+        <a href="{{ url_for('grafos.index') }}" class="back">
+            < [ VOLVER AL MAPA ]</a>
 
         <h1>[ TERMINAL DE GESTIÓN DE UNIDADES ]</h1>
+        
         <table>
             <thead>
                 <tr>
@@ -52,22 +104,28 @@
                 <tr>
                     <td>{{ u.id }}</td>
                     <td>{{ u.username }}</td>
+                    
                     <td style="color: {{ '#ff0000' if u.id == 1 else '#f7ad3d' }};">
                         {{ 'ADMINISTRADOR CENTRAL' if u.id == 1 else u.rol.upper() }}
                     </td>
+
                     <td>
                         {% if u.id != 1 %}
-                            <a href="{{ url_for('grafos.cambiar_rango', id=u.id, nuevo_rol='usuario') }}" class="btn-rank rank-user">[ NIVEL 1 ]</a>
-                            <a href="{{ url_for('grafos.cambiar_rango', id=u.id, nuevo_rol='ingeniero') }}" class="btn-rank rank-ing">[ NIVEL 2 ]</a>
+                        <a href="{{ url_for('grafos.cambiar_rango', id=u.id, nuevo_rol='usuario') }}"
+                            class="btn-rank rank-user">[ NIVEL 1 ]</a>
+                        <a href="{{ url_for('grafos.cambiar_rango', id=u.id, nuevo_rol='ingeniero') }}"
+                            class="btn-rank rank-ing">[ NIVEL 2 ]</a>
                         {% else %}
-                            <span style="color: #555;">[ RANGO FIJO ]</span>
+                        <span style="color: #555;">[ RANGO FIJO ]</span>
                         {% endif %}
                     </td>
+
                     <td>
                         {% if u.id != 1 %}
-                            <a href="{{ url_for('grafos.eliminar_usuario', id=u.id) }}" class="btn-delete" onclick="return confirm('¿CONFIRMAR DESCONEXIÓN?')">[ ELIMINAR ]</a>
+                        <a href="{{ url_for('grafos.eliminar_usuario', id=u.id) }}" class="btn-delete"
+                            onclick="confirmarDesconexion(event, this)">[ ELIMINAR ]</a>
                         {% else %}
-                            <span style="color: #ff0000;">[ PROTECCIÓN DE SISTEMA ]</span>
+                        <span style="color: #ff0000;">[ PROTECCIÓN DE SISTEMA ]</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -75,5 +133,80 @@
             </tbody>
         </table>
     </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        /* Captura y despliegue de mensajes Flash enviados por el servidor */
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        var msg = {{ message | tojson }};
+        Toastify({
+            text: msg,
+            duration: 4000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#003300",
+                border: "1px solid #00ff00",
+                color: "#00ff00",
+                fontFamily: "'Courier New', monospace",
+                boxShadow: "0 0 10px #00ff00"
+            },
+        }).showToast();
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        /**
+         * Función para interceptar la eliminación y pedir confirmación
+         * mediante un Toast interactivo personalizado.
+         */
+        function confirmarDesconexion(event, btnElement) {
+            event.preventDefault(); // Detiene la navegación inmediata
+
+            var existingToast = document.querySelector(".toast-confirm-container");
+            if (existingToast) return;
+
+            // Creación de la interfaz de confirmación in-page
+            var container = document.createElement("div");
+            container.className = "toast-confirm-container";
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <span style="font-weight: bold; color: #00ff00;">[ TERMINAL DE SEGURIDAD ]</span>
+                    <span style="color: #fff;">¿CONFIRMAR DESCONEXIÓN DE LA UNIDAD?</span>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 5px;">
+                        <button id="toast-cancel" style="background: transparent; border: 1px solid #00ff00; color: #00ff00; padding: 5px 10px; cursor: pointer; font-family: inherit;">CANCELAR</button>
+                        <button id="toast-confirm" style="background: #ff0000; border: 1px solid #ff0000; color: #fff; padding: 5px 10px; font-weight: bold; cursor: pointer; font-family: inherit; box-shadow: 0 0 10px #ff0000;">DESCONECTAR</button>
+                    </div>
+                </div>
+            `;
+
+            var toast = Toastify({
+                node: container,
+                duration: -1, // Se mantiene visible hasta que el usuario decida
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "#0a0a0a",
+                    border: "2px solid #ff0000",
+                    fontFamily: "'Courier New', monospace",
+                    boxShadow: "0 0 50px rgba(255, 0, 0, 0.3)",
+                    padding: "20px"
+                }
+            }).showToast();
+
+            // Lógica de los botones dentro de la notificación
+            container.querySelector("#toast-confirm").onclick = function () {
+                toast.hideToast();
+                window.location.href = btnElement.getAttribute("href");
+            };
+
+            container.querySelector("#toast-cancel").onclick = function () {
+                toast.hideToast();
+            };
+        }
+    </script>
 </body>
+
 </html>

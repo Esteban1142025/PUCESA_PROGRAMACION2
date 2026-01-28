@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Explorador de Laberinto</title>
@@ -7,57 +8,111 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
     <style>
+        /* Fuente de estilo retro 'Pixel' para reforzar la estética de terminal */
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-        body { 
-            font-family: 'VT323', monospace; 
-            background-color: #1a1a1c !important; 
-            overflow: hidden; 
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #1a1a1c !important;
+            overflow: hidden; /* Bloquea el scroll de la página para mantener el HUD fijo */
             height: 100vh;
             width: 100vw;
         }
 
-        #map { 
-            height: 750px; width: 100%; 
-            border: 4px solid #1a1a1c; 
+        /* Contenedor del mapa con sombras internas para efecto de profundidad */
+        #map {
+            height: 750px;
+            width: 100%;
+            border: 4px solid #1a1a1c;
             border-top: 4px solid #45454a;
-            background: #0c0c0e !important; 
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
+            background: #0c0c0e !important;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9);
         }
 
+        /* Capa estética de 'scanlines' para simular un monitor CRT antiguo */
         .scanlines {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 999; pointer-events: none; background-size: 100% 3px, 3px 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            pointer-events: none; /* Permite interactuar con el mapa debajo de esta capa */
+            background-size: 100% 3px, 3px 100%;
         }
 
-        .card, .trayectoria-panel {
+        /* Estilo de tarjetas con bordes rectos y sombras sólidas (estilo brutalista/industrial) */
+        .card,
+        .trayectoria-panel {
             background: #2d2d31 !important;
             border: 2px solid #45454a !important;
             border-radius: 0 !important;
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.5);
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
         }
 
-        .result-card { position: absolute; top: 20px; right: 20px; z-index: 1001; width: 280px; }
+        /* Posicionamiento flotante para la tarjeta de resultados sobre el mapa */
+        .result-card {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            width: 280px;
+        }
 
-        .title-industrial { color: #f7ad3d; text-transform: uppercase; letter-spacing: 2px; }
+        .title-industrial {
+            color: #f7ad3d;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
+        /* Etiquetas para representar los nodos en la lista de trayectoria */
         .nodo-tag {
-            background: #1a1a1c; color: #84f491; border: 1px solid #45454a;
-            padding: 2px 8px; margin: 2px; font-size: 1.1rem;
+            background: #1a1a1c;
+            color: #84f491;
+            border: 1px solid #45454a;
+            padding: 2px 8px;
+            margin: 2px;
+            font-size: 1.1rem;
         }
 
-        .btn { border-radius: 0; border: none; border-bottom: 4px solid rgba(0,0,0,0.3); font-weight: bold; }
-        .btn-primary { background: #f7ad3d; color: #1a1a1c; }
-        .btn-primary:hover { background: #ffc266; color: #000; }
+        /* Botonera personalizada con efecto de profundidad en el borde inferior */
+        .btn {
+            border-radius: 0;
+            border: none;
+            border-bottom: 4px solid rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
 
+        .btn-primary {
+            background: #f7ad3d;
+            color: #1a1a1c;
+        }
+
+        .btn-primary:hover {
+            background: #ffc266;
+            color: #000;
+        }
+
+        /* Animación de pulso para los marcadores de alerta o bloqueo */
         @keyframes pulse-red {
-            0% { filter: drop-shadow(0 0 2px #ff4d4d); }
-            50% { filter: drop-shadow(0 0 8px #ff4d4d); }
-            100% { filter: drop-shadow(0 0 2px #ff4d4d); }
+            0% {
+                filter: drop-shadow(0 0 2px #ff4d4d);
+            }
+
+            50% {
+                filter: drop-shadow(0 0 8px #ff4d4d);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 2px #ff4d4d);
+            }
         }
+
         .col-md-3 {
             height: 100vh;
             overflow-y: auto;
@@ -66,415 +121,550 @@
         }
 
         .trayectoria-panel {
-            background: #0c0c0e !important; 
+            background: #0c0c0e !important;
             padding: 15px;
             border: 1px solid #45454a !important;
             min-height: 100px;
             max-height: 300px;
             overflow-y: auto;
         }
+
+        /* Estilo para campos de solo lectura con efecto de brillo de texto */
         input[readonly] {
-        background-color: #0c0c0e !important;
-        border-style: dashed !important; 
-        text-shadow: 0 0 5px currentColor; 
-        cursor: default;
+            background-color: #0c0c0e !important;
+            border-style: dashed !important;
+            text-shadow: 0 0 5px currentColor;
+            cursor: default;
         }
+
+        /* Animación de línea punteada para la ruta trazada en el mapa */
         .ruta-animada {
-        stroke-dasharray: 10, 10;
-        animation: dash 1s linear infinite;
+            stroke-dasharray: 10, 10;
+            animation: dash 1s linear infinite;
         }
 
         @keyframes dash {
-        from { stroke-dashoffset: 20; }
-        to { stroke-dashoffset: 0; }
+            from {
+                stroke-dashoffset: 20;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
         }
-        .pulsating-marker { animation: pulse-red 1.5s infinite; }
+
+        .pulsating-marker {
+            animation: pulse-red 1.5s infinite;
+        }
     </style>
 </head>
+
 <body class="bg-dark text-light">
     <div class="container-fluid py-3">
         <div class="row">
-            <div class="row g-0" style="height: 100vh;"> <div class="col-md-9 position-relative" style="height: 100vh;">
-            <div class="scanlines"></div>
-            <div id="map" style="height: 100%; border-radius: 0;"></div>
-                
-                {% if res and not res.error %}
-                <div class="card result-card bg-dark border-primary text-white shadow-lg">
-                    <div class="card-body">
-                        <h6 class="text-primary mb-1">Ruta Encontrada</h6>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small text-secondary">Costo del viaje:</span>
-                            <span class="badge bg-primary px-3">{{ res.costo }} saltos</span>
+            <div class="row g-0" style="height: 100vh;">
+                <div class="col-md-9 position-relative" style="height: 100vh;">
+                    <div class="scanlines"></div>
+                    <div id="map" style="height: 100%; border-radius: 0;"></div>
+
+                    {% if res and not res.error %}
+                    <div class="card result-card bg-dark border-primary text-white shadow-lg">
+                        <div class="card-body">
+                            <h6 class="text-primary mb-1">Ruta Encontrada</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small text-secondary">Costo del viaje:</span>
+                                <span class="badge bg-primary px-3">{{ res.costo }} saltos</span>
+                            </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
 
-            <div class="col-md-3">
-                <div class="card bg-secondary text-white shadow h-100">
-                    <div class="card-body">
-                        <h5 class="title-industrial border-bottom pb-2 mb-4">[ CONTROL DE RUTAS ]</h5>
-                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #45454a; padding-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <p style="color: #00ff00; margin: 0; font-size: 1.1rem;">
-                                > UNIDAD: {{ session['username'] }} <br>
-                                > RANGO: {{ session['rol'] }}
-                            </p>
-                            <a href="{{ url_for('main.logout') }}" 
-                            style="color: #f7ad3d; text-decoration: none; border: 1px solid #f7ad3d; padding: 5px 10px; font-size: 0.9rem; transition: 0.3s;"
-                            onmouseover="this.style.background='#f7ad3d'; this.style.color='#000'"
-                            onmouseout="this.style.background='transparent'; this.style.color='#f7ad3d'">
-                            [ DESCONECTAR ]
-                            </a>
-                        </div>
-
-                        {% if session['rol'] == 'admin' %}
-                        <a href="{{ url_for('grafos.panel_admin') }}" 
-                        style="background: transparent; border: 1px solid #ff0000; color: #ff0000; padding: 10px; text-decoration: none; font-weight: bold; text-align: center; box-shadow: 0 0 10px rgba(255,0,0,0.2);">
-                        [ ACCEDER AL PANEL DE COMANDO ]
-                        </a>
-                        {% endif %}
-                    </div>
-                        <form method="POST" class="mb-4" id="form-mapa">
-                            <div class="mb-2">
-                                <label class="form-label small">Origen:</label>
-                                <input type="text" id="origen" name="origen" class="form-control form-control-sm bg-dark text-info border-info" readonly value="{{ res.origen if res else '' }}">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label small">Destino:</label>
-                                <input type="text" id="destino" name="destino" class="form-control form-control-sm bg-dark text-warning border-warning" readonly value="{{ res.destino if res else '' }}">
-                            </div>
+                <div class="col-md-3">
+                    <div class="card bg-secondary text-white shadow h-100">
+                        <div class="card-body">
+                            <h5 class="title-industrial border-bottom pb-2 mb-4">[ CONTROL DE RUTAS ]</h5>
                             
-                            <input type="hidden" id="nodos_bloqueados_lista" name="nodos_bloqueados_lista" value="{{ res.bloqueados_str if res else '' }}">
-                            <div class="mb-3">
-                                <label class="form-label small text-danger">Nodos Bloqueados:</label>
-                                <div id="visual-bloqueos" class="small text-secondary p-1 border border-secondary rounded" style="min-height: 30px; background: #111;">
-                                    {{ res.bloqueados_str if res and res.bloqueados_str else 'Ninguno' }}
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #45454a; padding-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <p style="color: #00ff00; margin: 0; font-size: 1.1rem;">
+                                        > UNIDAD: {{ session['username'] }} <br>
+                                        > RANGO: {{ session['rol'] }}
+                                    </p>
+                                    <a href="{{ url_for('main.logout') }}"
+                                        style="color: #f7ad3d; text-decoration: none; border: 1px solid #f7ad3d; padding: 5px 10px; font-size: 0.9rem; transition: 0.3s;"
+                                        onmouseover="this.style.background='#f7ad3d'; this.style.color='#000'"
+                                        onmouseout="this.style.background='transparent'; this.style.color='#f7ad3d'">
+                                        [ DESCONECTAR ]
+                                    </a>
                                 </div>
-                            </div>
 
-                            <button type="submit" class="btn btn-primary w-100 mb-2">Calcular Trayectoria</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm w-100 mb-2" onclick="activarModoBloqueo()">Bloquear Nodo</button>
-                            <button type="button" class="btn btn-warning btn-sm w-100 mb-2" onclick="limpiarBloqueos()">Desbloquear Todo</button>
-                            <button type="button" id="btn-limpiar" class="btn btn-outline-light btn-sm w-100" onclick="limpiarPanel()">Reiniciar Mapa</button>
-                            {% if session['rol'] == 'admin' %}
-                            <div class="mt-4 pt-3 border-top border-danger">
-                                <h6 class="text-danger small">[ PROTOCOLO DE RESTRICCIÓN ]</h6>
-                                <button type="submit" 
-                                        formaction="{{ url_for('grafos.actualizar_bloqueos_globales') }}" 
-                                        class="btn btn-danger btn-sm w-100"
-                                        onclick="return confirm('¿BLOQUEAR ESTOS NODOS PARA TODA LA PLANTA?')">
-                                    PUBLICAR BLOQUEO GLOBAL
-                                </button>
-                                <p class="text-secondary" style="font-size: 0.75rem; margin-top: 5px;">
-                                    * Los nodos marcados serán inaccesibles para todas las unidades.
-                                </p>
-                            </div>
-                            {% endif %}
-                        </form>
-
-                        <div class="mt-4">
-                            <h6 class="text-info mb-3">Trayectoria:</h6>
-                            <div class="trayectoria-panel shadow-inner">
-                                {% if res and res.camino_nodos %}
-                                    {% for nodo in res.camino_nodos %}
-                                        <span class="nodo-tag">{{ nodo }}</span>
-                                        {% if not loop.last %}<span class="flecha-separador">→</span>{% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="text-warning small text-center fw-light italic">Selecciona puntos en el mapa para visualizar la ruta aquí.</p>
+                                {% if session['rol'] == 'admin' %}
+                                <a href="{{ url_for('grafos.panel_admin') }}"
+                                    style="background: transparent; border: 1px solid #ff0000; color: #ff0000; padding: 10px; text-decoration: none; font-weight: bold; text-align: center; box-shadow: 0 0 10px rgba(255,0,0,0.2);">
+                                    [ ACCEDER AL PANEL DE COMANDO ]
+                                </a>
                                 {% endif %}
                             </div>
-                        </div>
 
-                        {% if res and not res.error %}
-                        <div class="hud-panel-favoritos mt-4" style="border: 1px dashed #f7ad3d; padding: 15px; background: rgba(247, 173, 61, 0.05);">
-                            <h6 style="color: #f7ad3d; font-size: 0.9rem; text-transform: uppercase;">[ Guardar en Memoria ]</h6>
-                            
-                            <form action="{{ url_for('grafos.guardar_favorita') }}" method="POST">
-                                <input type="hidden" name="origen_fav" value="{{ res.origen }}">
-                                <input type="hidden" name="destino_fav" value="{{ res.destino }}">
-                                <input type="hidden" name="bloqueos_fav" value="{{ res.bloqueados_str }}">
-
+                            <form method="POST" class="mb-4" id="form-mapa">
                                 <div class="mb-2">
-                                    <input type="text" name="nombre_ruta_personalizado" 
-                                        placeholder="ID_DE_RUTA_FAV" 
-                                        class="form-control form-control-sm" 
-                                        style="background: #0c0c0e; color: #f7ad3d; border: 1px solid #45454a; font-family: 'VT323', monospace;" 
-                                        required>
+                                    <label class="form-label small">Origen:</label>
+                                    <input type="text" id="origen" name="origen"
+                                        class="form-control form-control-sm bg-dark text-info border-info" readonly
+                                        value="{{ res.origen if res else '' }}">
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label small">Destino:</label>
+                                    <input type="text" id="destino" name="destino"
+                                        class="form-control form-control-sm bg-dark text-warning border-warning"
+                                        readonly value="{{ res.destino if res else '' }}">
+                                </div>
+
+                                <input type="hidden" id="nodos_bloqueados_lista" name="nodos_bloqueados_lista"
+                                    value="{{ res.bloqueados_str if res else '' }}">
                                 
-                                <button type="submit" class="btn btn-outline-warning btn-sm w-100" style="font-size: 0.8rem;">
-                                    MEMORIZAR TRAYECTO
-                                </button>
+                                <div class="mb-3">
+                                    <label class="form-label small text-danger">Nodos Bloqueados:</label>
+                                    <div id="visual-bloqueos"
+                                        class="small text-secondary p-1 border border-secondary rounded"
+                                        style="min-height: 30px; background: #111;">
+                                        {{ res.bloqueados_str if res and res.bloqueados_str else 'Ninguno' }}
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 mb-2">Calcular Trayectoria</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm w-100 mb-2"
+                                    onclick="activarModoBloqueo()">Bloquear Nodo</button>
+                                <button type="button" class="btn btn-warning btn-sm w-100 mb-2"
+                                    onclick="limpiarBloqueos()">Desbloquear Todo</button>
+                                <button type="button" id="btn-limpiar" class="btn btn-outline-light btn-sm w-100"
+                                    onclick="limpiarPanel()">Reiniciar Mapa</button>
+
+                                {% if session['rol'] == 'admin' %}
+                                <div class="mt-4 pt-3 border-top border-danger">
+                                    <h6 class="text-danger small">[ PROTOCOLO DE RESTRICCIÓN ]</h6>
+                                    <button type="submit"
+                                        formaction="{{ url_for('grafos.actualizar_bloqueos_globales') }}"
+                                        class="btn btn-danger btn-sm w-100"
+                                        onclick="confirmarBloqueoGlobal(event, this)">
+                                        PUBLICAR BLOQUEO GLOBAL
+                                    </button>
+                                    <p class="text-secondary" style="font-size: 0.75rem; margin-top: 5px;">
+                                        * Los nodos marcados serán inaccesibles para todas las unidades.
+                                    </p>
+                                </div>
+                                {% endif %}
                             </form>
+
+                            <div class="mt-4">
+                                <h6 class="text-info mb-3">Trayectoria:</h6>
+                                <div class="trayectoria-panel shadow-inner">
+                                    {% if res and res.camino_nodos %}
+                                    {% for nodo in res.camino_nodos %}
+                                    <span class="nodo-tag">{{ nodo }}</span>
+                                    {% if not loop.last %}<span class="flecha-separador">→</span>{% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <p class="text-warning small text-center fw-light italic">Selecciona puntos en el
+                                        mapa para visualizar la ruta aquí.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if res and not res.error %}
+                            <div class="hud-panel-favoritos mt-4"
+                                style="border: 1px dashed #f7ad3d; padding: 15px; background: rgba(247, 173, 61, 0.05);">
+                                <h6 style="color: #f7ad3d; font-size: 0.9rem; text-transform: uppercase;">[ Guardar en
+                                    Memoria ]</h6>
+
+                                <form action="{{ url_for('grafos.guardar_favorita') }}" method="POST">
+                                    <input type="hidden" name="origen_fav" value="{{ res.origen }}">
+                                    <input type="hidden" name="destino_fav" value="{{ res.destino }}">
+                                    <input type="hidden" name="bloqueos_fav" value="{{ res.bloqueados_str }}">
+
+                                    <div class="mb-2">
+                                        <input type="text" name="nombre_ruta_personalizado" placeholder="ID_DE_RUTA_FAV"
+                                            class="form-control form-control-sm"
+                                            style="background: #0c0c0e; color: #f7ad3d; border: 1px solid #45454a; font-family: 'VT323', monospace;"
+                                            required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-outline-warning btn-sm w-100"
+                                        style="font-size: 0.8rem;">
+                                        MEMORIZAR TRAYECTO
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
-                        {% if res and res.error %}
-                            <div class="alert alert-danger mt-3 small">{{ res.error }}</div>
-                        {% endif %}
-                        
-                        {% if res and res.error %}
-                            <div class="alert alert-danger mt-3 small">{{ res.error }}</div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    // Configuracion Base
-    var bounds = [[-1600, 0], [0, 1600]];
-    var map = L.map('map', {
-        crs: L.CRS.Simple,
-        minZoom: -1,
-        maxZoom: 3,
-        maxBounds: bounds
-    });
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script>
+            // Configuracion Base del Mapa
+            // Define el sistema de coordenadas planas (CRS.Simple) y los límites del lienzo
+            var bounds = [[-1600, 0], [0, 1600]];
+            var map = L.map('map', {
+                crs: L.CRS.Simple,
+                minZoom: -1,
+                maxZoom: 3,
+                maxBounds: bounds
+            });
 
-    // Carga de imagenes
-    var mapaAltaRes = L.layerGroup();
-    for (var x = 0; x < 4; x++) {
-        for (var y = 0; y < 4; y++) {
-            var piezaBounds = [[-400 * (y + 1), 400 * x], [-400 * y, 400 * (x + 1)]];
-            L.imageOverlay('/static/mapa/2/' + x + '/' + y + '.png', piezaBounds).addTo(mapaAltaRes);
-        }
-    }
-    mapaAltaRes.addTo(map);
-    map.fitBounds(bounds);
-
-    // Definicion de nodos
-    // Puntos Rojos (Puntos de interes)
-    var puntosInteres = {
-        "Nucleo_Laberinto": [-635, 620],
-        "Esq_Sup_Der": [-90, 1165],
-        "Esq_Sup_Izq": [-120, 70],
-        "Esq_Inf_Der": [-1180, 1165],
-        "Esq_Inf_Izq": [-1170, 30]
-    };
-
-    // Puntos Azules (Nodos de conexión para pasillos)
-    var nodosTransito = {
-        "1": [-89, 70],     "2": [-89, 133],    "3": [-89, 227],    "4": [-145, 227],
-        "5": [-145, 198],   "6": [-179, 134],   "7": [-179, 75],    "8": [-302, 75],
-        "9": [-363, 75],    "10": [-240, 134],  "11": [-240, 198],  "12": [-241, 259],
-        "13": [-212, 259],  "14": [-302, 259],  "15": [-302, 225],  "16": [-368, 225],
-        "17": [-368, 167],  "18": [-368, 259],  "19": [-368, 197],  "20": [-454, 197],
-        "21": [-430, 259],  "22": [-430, 291],  "23": [-430, 324],  "24": [-302, 324],
-        "25": [-275, 324],  "26": [-212, 324],  "27": [-212, 290],  "28": [-212, 385],
-        "29": [-151, 385],  "30": [-151, 352],  "31": [-89, 290],   "32": [-89, 447],
-        "33": [-177, 447],  "34": [-212, 447],  "35": [-308, 447],  "36": [-308, 390],
-        "37": [-275, 389],  "38": [-308, 478],  "39": [-363, 478],  "40": [-363, 450],
-        "41": [-395, 450],  "42": [-395, 385],  "43": [-430, 385],  "44": [-460, 385],
-        "45": [-177, 510],  "46": [-177, 571],  "47": [-90, 571],   "48": [-308, 510],
-        "49": [-308, 570],  "50": [-246, 570],  "51": [-369, 570],  "52": [-428, 570],
-        "53": [-459, 570],  "54": [-459, 662],  "55": [-401, 662],  "56": [-401, 634],
-        "57": [-369, 632],  "58": [-428, 509],  "59": [-460, 509],  "60": [-460, 448],
-        "61": [-246, 665],  "62": [-212, 665],  "63": [-302, 665],  "64": [-212, 727],
-        "65": [-179, 727],  "66": [-243, 727],  "67": [-243, 760],  "68": [-179, 824],
-        "69": [-120, 824],  "70": [-120, 884],  "71": [-150, 884],  "72": [-180, 884],
-        "73": [-209, 884],  "74": [-150, 945],  "75": [-87, 945],   "76": [-87, 1010],
-        "77": [-181, 1010], "78": [-181, 1071], "79": [-151, 1071], "80": [-89, 1071],
-        "81": [-151, 1165], "82": [-272, 1165], "83": [-272, 1135], "84": [-306, 1135],
-        "85": [-339, 1135], "86": [-339, 1165], "87": [-306, 1042], "88": [-306, 1010],
-        "89": [-270, 1010], "90": [-270, 946],  "91": [-270, 914],  "92": [-209, 914],
-        "93": [-270, 856],  "94": [-302, 856],  "95": [-334, 946],  "96": [-334, 918], 
-        "97": [-367, 918],  "98": [-367, 793],  "99": [-276, 793],  "100": [-276, 760],
-        "101": [-430, 1165],"102": [-430, 1106],"103": [-400, 1106],"104": [-400, 1075],
-        "105": [-368, 1075],"106": [-368, 1042],"107": [-368, 1012],"108": [-402, 1012],
-        "109": [-402, 918], "110": [-436, 918], "111": [-436, 856], "112": [-463, 856],
-        "113": [-463, 793], "114": [-495, 793], "115": [-495, 730], "116": [-401, 730],
-        "117": [-401, 694], "118": [-302, 694], "119": [-459, 1012],"120": [-459, 1042],
-        "121": [-490, 1042],"122": [-490, 1165],"123": [-553, 1165],"124": [-553, 1075],
-        "125": [-553, 982], "126": [-527, 982], "127": [-527, 947], "128": [-465, 947],
-        "129": [-465, 918], "130": [-528, 730], "131": [-528, 620], "132": [-528, 509],
-        "133": [-635, 731], "134": [-708, 731], "135": [-743, 731], "136": [-743, 620],
-        "137": [-743, 509], "138": [-711, 509], "139": [-635, 509], "140": [-711, 448],
-        "141": [-620, 448], "142": [-620, 389], "143": [-591, 389], "144": [-591, 325],
-        "145": [-525, 325], "146": [-525, 382], "147": [-493, 325], "148": [-493, 293],
-        "149": [-493, 263], "150": [-525, 263], "151": [-525, 134], "152": [-495, 134],
-        "153": [-432, 134], "154": [-432, 105], "155": [-432, 76],  "156": [-495, 76],
-        "157": [-363, 105], "158": [-585, 76],  "159": [-585, 105], "160": [-585, 198],
-        "161": [-619, 198], "162": [-619, 263], "163": [-682, 263], "164": [-682, 325],
-        "165": [-682, 380], "166": [-745, 380], "167": [-745, 290], "168": [-745, 263],
-        "169": [-650, 74],  "170": [-650, 105], "171": [-650, 136], "172": [-677, 136],
-        "173": [-677, 193], "174": [-744, 74],  "175": [-744, 193], "176": [-807, 193],
-        "177": [-807, 166], "178": [-807, 74],  "179": [-840, 74],  "180": [-871, 228],
-        "181": [-871, 166], "182": [-868, 138], "183": [-903, 138], "184": [-903, 74],
-        "185": [-931, 74],  "186": [-934, 138], "187": [-934, 168], "188": [-991, 168],
-        "189": [-991, 135], "190": [-991, 79],  "191": [-1114, 79], "192": [-1114, 107],
-        "193": [-1114, 166],"194": [-1170, 107],"195": [-1055, 135],"196": [-1055, 166],
-        "197": [-1055, 228],"198": [-1170, 228],"199": [-993, 228], "200": [-930, 228],
-        "201": [-930, 323], "202": [-995, 323], "203": [-1055, 323],"204": [-930, 290],
-        "205": [-1170, 293],"206": [-1120, 293],"207": [-1120, 385],"208": [-1176, 385],
-        "209": [-1056, 385],"210": [-991, 385], "211": [-930, 385], "212": [-1176, 448],
-        "213": [-1117, 448],"214": [-1117, 479],"215": [-1056, 479],"216": [-1176, 540],
-        "217": [-1120, 540],"218": [-1120, 620],"219": [-1175, 620],"220": [-1120, 700],
-        "221": [-1179, 700],"222": [-1179, 792],"223": [-1120, 792],"224": [-1120, 755],
-        "225": [-1057, 755],"226": [-1057, 855],"227": [-1091, 855],"228": [-1181, 855],
-        "229": [-1181, 946],"230": [-1122, 946],"231": [-1122, 916],"232": [-1091, 916],
-        "233": [-1056, 916], "234": [-1056, 1010],"235": [-1089, 1010],"236": [-1089, 1071],
-        "237": [-1118, 1071],"238": [-1118, 1165],"239": [-1180, 1010],"240": [-1056, 541],
-        "241": [-997, 541], "242": [-997, 603], "243": [-1054, 603],"244": [-1054, 697],
-        "245": [-997, 697], "246": [-997, 755], "247": [-930, 755], "248": [-930, 699],
-        "249": [-930, 604], "250": [-991, 477], "251": [-902, 477], "252": [-902, 418],
-        "253": [-930, 418], "254": [-870, 418], "255": [-870, 357], "256": [-800, 357],
-        "257": [-800, 382], "258": [-800, 479], "259": [-743, 540], "260": [-800, 540],
-        "261": [-930, 540], "262": [-800, 637], "263": [-867, 637], "264": [-867, 699],
-        "265": [-800, 699], "266": [-743, 699], "267": [-800, 755], "268": [-900, 755],
-        "269": [-900, 822], "270": [-870, 822], "271": [-928, 822], "272": [-928, 852],
-        "273": [-992, 852], "274": [-992, 829], "275": [-870, 854], "276": [-870, 917],
-        "277": [-928, 917], "278": [-928, 947], "279": [-961, 947], "280": [-991, 947],
-        "281": [-991, 916], "282": [-961, 1009],"283": [-932, 1009],"284": [-932, 1041],
-        "285": [-870, 1041],"286": [-870, 1163],"287": [-931, 1163],"288": [-931, 1105],
-        "289": [-990, 1105],"290": [-993, 1163],"291": [-990, 1071],"292": [-809, 1163],
-        "293": [-809, 1137],"294": [-683, 1137],"295": [-683, 1166],"296": [-621, 1166],
-        "297": [-621, 1075],"298": [-870, 1074],"299": [-770, 1074],"300": [-770, 1043],
-        "301": [-770, 950], "302": [-807, 950], "303": [-807, 887], "304": [-807, 854],
-        "305": [-747, 887], "306": [-747, 792], "307": [-708, 792], "308": [-683, 1076],
-        "309": [-708, 1076],"310": [-708, 1044],"311": [-708, 949], "312": [-683, 949],
-        "313": [-683, 856], "314": [-620, 856], "315": [-587, 856], "316": [-620, 792],
-        "317": [-587, 917], "318": [-617, 917], "319": [-617, 982], "320": [-240, 75.0]
-    };
-
-    var modoBloqueoActivo = false;
-
-    function activarModoBloqueo() {
-        modoBloqueoActivo = true;
-        alert("Haz clic en un nodo para marcarlo como obstaculo");
-    }
-
-    var proximoInput = 'origen';
-    var todosLosNodos = Object.assign({}, puntosInteres, nodosTransito);
-
-    // Cargar datos desde Flask
-    var listaAislados = {{ aislados | tojson | safe if aislados else '[]' }};
-    // Carga los bloqueos: ya sea del último cálculo (res) o de lo que hay en la BD
-    var bloqueadosStr = "{{ res.bloqueados_str if res else bloqueados_desde_db }}";
-    var listaBloqueados = bloqueadosStr ? bloqueadosStr.split(',') : [];
-
-    function activarModoBloqueo() {
-        modoBloqueoActivo = true;
-        alert("Haz clic en un nodo para añadirlo a la lista de obstáculos");
-    }
-
-    function limpiarBloqueos() {
-    // Limpiamos el input oculto que tiene la lista de nodos
-    document.getElementById('nodos_bloqueados_lista').value = "";
-    
-    // Enviamos el formulario automáticamente al servidor
-    // Esto hace que el POST de la ruta index guarde el string vacío en la DB
-    document.getElementById('tu_formulario_id').submit(); 
-}
-
-    Object.keys(todosLosNodos).forEach(function(key) {
-    var esInteres = puntosInteres.hasOwnProperty(key);
-    var esAislado = listaAislados.includes(key);
-    
-    // Detectar si el nodo viene de la lista global del admin
-    var esBloqueoGlobal = {{ bloqueos_globales | tojson | safe if bloqueos_globales else '[]' }}.includes(key);
-    var esBloqueoLocal = listaBloqueados.includes(key);
-    var esBloqueado = esBloqueoGlobal || esBloqueoLocal;
-
-    // Definir estilo según estado
-    var colorNodo = "#007bff"; 
-    if (esBloqueoGlobal) colorNodo = "#ff0000"; // Rojo puro para bloqueos del Admin
-    else if (esBloqueoLocal) colorNodo = "#4f00be"; // Morado para bloqueos temporales
-    else if (esInteres) colorNodo = "#f7ad3d"; 
-    else if (esAislado) colorNodo = "#ffff00";
-
-    var radioNodo = esBloqueado ? 9 : (esAislado ? 8 : (esInteres ? 7 : 5));
-
-    var marker = L.circleMarker(todosLosNodos[key], {
-        radius: radioNodo,
-        fillColor: colorNodo,
-        color: esBloqueoGlobal ? "#ff0000" : "#ffffff",
-        weight: esBloqueoGlobal ? 4 : 2, // Borde más grueso si es global
-        fillOpacity: 0.9,
-        className: esBloqueado ? 'pulsating-marker' : ''
-    }).addTo(map).bindTooltip(
-        esBloqueoGlobal ? "[ ACCESO DENEGADO POR ADMIN ]: " + key : 
-        (esBloqueoLocal ? "[ OBSTÁCULO TEMPORAL ]: " + key : "[ NODO ]: " + key)
-    );
-
-        marker.on('click', function() {
-            if (modoBloqueoActivo) {
-                // Agregar a la lista si no existe
-                if (!listaBloqueados.includes(key)) {
-                    listaBloqueados.push(key);
-                    document.getElementById('nodos_bloqueados_lista').value = listaBloqueados.join(',');
-                    document.getElementById('visual-bloqueos').innerText = listaBloqueados.join(', ');
-                    marker.setStyle({fillColor: '#ff8c00', radius: 9, color: '#ff0000', weight: 3});
+            // Carga de imagenes por teselas (Tiles)
+            // Divide el mapa en una cuadrícula de 4x4 para optimizar la carga de archivos
+            var mapaAltaRes = L.layerGroup();
+            for (var x = 0; x < 4; x++) {
+                for (var y = 0; y < 4; y++) {
+                    var piezaBounds = [[-400 * (y + 1), 400 * x], [-400 * y, 400 * (x + 1)]];
+                    // Ruta dinámica a las piezas del mapa localizadas en static
+                    L.imageOverlay('/static/mapa/2/' + x + '/' + y + '.png', piezaBounds).addTo(mapaAltaRes);
                 }
-                modoBloqueoActivo = false;
-            } else {
-                document.getElementById(proximoInput).value = key;
-                proximoInput = (proximoInput === 'origen') ? 'destino' : 'origen';
             }
-        });
-    });
+            mapaAltaRes.addTo(map);
+            map.fitBounds(bounds);
 
-    // Dibujar la ruta pero solo se activa si Flask envía 'res'
-    {% if res and res.camino_nodos %}
-        var caminoCoordenadas = [];
-        var nombresNodos = {{ res.camino_nodos | tojson }}; // Lista de nombres de nodos
-        
-        nombresNodos.forEach(function(nombre) {
-            if (todosLosNodos[nombre]) {
-                caminoCoordenadas.push(todosLosNodos[nombre]);
+            // Definicion de nodos del Grafo
+            // Puntos Rojos: Ubicaciones clave o hitos en el laberinto
+            var puntosInteres = {
+                "Nucleo_Laberinto": [-635, 620],
+                "Esq_Sup_Der": [-90, 1165],
+                "Esq_Sup_Izq": [-120, 70],
+                "Esq_Inf_Der": [-1180, 1165],
+                "Esq_Inf_Izq": [-1170, 30]
+            };
+
+            // Puntos Azules: Nodos de tránsito
+            // Estos representan las intersecciones y pasillos para el algoritmo Dijkstra
+            var nodosTransito = {
+                "1": [-89, 70], "2": [-89, 133], "3": [-89, 227], "4": [-145, 227],
+                "5": [-145, 198], "6": [-179, 134], "7": [-179, 75], "8": [-302, 75],
+                "9": [-363, 75], "10": [-240, 134], "11": [-240, 198], "12": [-241, 259],
+                "13": [-212, 259], "14": [-302, 259], "15": [-302, 225], "16": [-368, 225],
+                "17": [-368, 167], "18": [-368, 259], "19": [-368, 197], "20": [-454, 197],
+                "21": [-430, 259], "22": [-430, 291], "23": [-430, 324], "24": [-302, 324],
+                "25": [-275, 324], "26": [-212, 324], "27": [-212, 290], "28": [-212, 385],
+                "29": [-151, 385], "30": [-151, 352], "31": [-89, 290], "32": [-89, 447],
+                "33": [-177, 447], "34": [-212, 447], "35": [-308, 447], "36": [-308, 390],
+                "37": [-275, 389], "38": [-308, 478], "39": [-363, 478], "40": [-363, 450],
+                "41": [-395, 450], "42": [-395, 385], "43": [-430, 385], "44": [-460, 385],
+                "45": [-177, 510], "46": [-177, 571], "47": [-90, 571], "48": [-308, 510],
+                "49": [-308, 570], "50": [-246, 570], "51": [-369, 570], "52": [-428, 570],
+                "53": [-459, 570], "54": [-459, 662], "55": [-401, 662], "56": [-401, 634],
+                "57": [-369, 632], "58": [-428, 509], "59": [-460, 509], "60": [-460, 448],
+                "61": [-246, 665], "62": [-212, 665], "63": [-302, 665], "64": [-212, 727],
+                "65": [-179, 727], "66": [-243, 727], "67": [-243, 760], "68": [-179, 824],
+                "69": [-120, 824], "70": [-120, 884], "71": [-150, 884], "72": [-180, 884],
+                "73": [-209, 884], "74": [-150, 945], "75": [-87, 945], "76": [-87, 1010],
+                "77": [-181, 1010], "78": [-181, 1071], "79": [-151, 1071], "80": [-89, 1071],
+                "81": [-151, 1165], "82": [-272, 1165], "83": [-272, 1135], "84": [-306, 1135],
+                "85": [-339, 1135], "86": [-339, 1165], "87": [-306, 1042], "88": [-306, 1010],
+                "89": [-270, 1010], "90": [-270, 946], "91": [-270, 914], "92": [-209, 914],
+                "93": [-270, 856], "94": [-302, 856], "95": [-334, 946], "96": [-334, 918],
+                "97": [-367, 918], "98": [-367, 793], "99": [-276, 793], "100": [-276, 760],
+                "101": [-430, 1165], "102": [-430, 1106], "103": [-400, 1106], "104": [-400, 1075],
+                "105": [-368, 1075], "106": [-368, 1042], "107": [-368, 1012], "108": [-402, 1012],
+                "109": [-402, 918], "110": [-436, 918], "111": [-436, 856], "112": [-463, 856],
+                "113": [-463, 793], "114": [-495, 793], "115": [-495, 730], "116": [-401, 730],
+                "117": [-401, 694], "118": [-302, 694], "119": [-459, 1012], "120": [-459, 1042],
+                "121": [-490, 1042], "122": [-490, 1165], "123": [-553, 1165], "124": [-553, 1075],
+                "125": [-553, 982], "126": [-527, 982], "127": [-527, 947], "128": [-465, 947],
+                "129": [-465, 918], "130": [-528, 730], "131": [-528, 620], "132": [-528, 509],
+                "133": [-635, 731], "134": [-708, 731], "135": [-743, 731], "136": [-743, 620],
+                "137": [-743, 509], "138": [-711, 509], "139": [-635, 509], "140": [-711, 448],
+                "141": [-620, 448], "142": [-620, 389], "143": [-591, 389], "144": [-591, 325],
+                "145": [-525, 325], "146": [-525, 382], "147": [-493, 325], "148": [-493, 293],
+                "149": [-493, 263], "150": [-525, 263], "151": [-525, 134], "152": [-495, 134],
+                "153": [-432, 134], "154": [-432, 105], "155": [-432, 76], "156": [-495, 76],
+                "157": [-363, 105], "158": [-585, 76], "159": [-585, 105], "160": [-585, 198],
+                "161": [-619, 198], "162": [-619, 263], "163": [-682, 263], "164": [-682, 325],
+                "165": [-682, 380], "166": [-745, 380], "167": [-745, 290], "168": [-745, 263],
+                "169": [-650, 74], "170": [-650, 105], "171": [-650, 136], "172": [-677, 136],
+                "173": [-677, 193], "174": [-744, 74], "175": [-744, 193], "176": [-807, 193],
+                "177": [-807, 166], "178": [-807, 74], "179": [-840, 74], "180": [-871, 228],
+                "181": [-871, 166], "182": [-868, 138], "183": [-903, 138], "184": [-903, 74],
+                "185": [-931, 74], "186": [-934, 138], "187": [-934, 168], "188": [-991, 168],
+                "189": [-991, 135], "190": [-991, 79], "191": [-1114, 79], "192": [-1114, 107],
+                "193": [-1114, 166], "194": [-1170, 107], "195": [-1055, 135], "196": [-1055, 166],
+                "197": [-1055, 228], "198": [-1170, 228], "199": [-993, 228], "200": [-930, 228],
+                "201": [-930, 323], "202": [-995, 323], "203": [-1055, 323], "204": [-930, 290],
+                "205": [-1170, 293], "206": [-1120, 293], "207": [-1120, 385], "208": [-1176, 385],
+                "209": [-1056, 385], "210": [-991, 385], "211": [-930, 385], "212": [-1176, 448],
+                "213": [-1117, 448], "214": [-1117, 479], "215": [-1056, 479], "216": [-1176, 540],
+                "217": [-1120, 540], "218": [-1120, 620], "219": [-1175, 620], "220": [-1120, 700],
+                "221": [-1179, 700], "222": [-1179, 792], "223": [-1120, 792], "224": [-1120, 755],
+                "225": [-1057, 755], "226": [-1057, 855], "227": [-1091, 855], "228": [-1181, 855],
+                "229": [-1181, 946], "230": [-1122, 946], "231": [-1122, 916], "232": [-1091, 916],
+                "233": [-1056, 916], "234": [-1056, 1010], "235": [-1089, 1010], "236": [-1089, 1071],
+                "237": [-1118, 1071], "238": [-1118, 1165], "239": [-1180, 1010], "240": [-1056, 541],
+                "241": [-997, 541], "242": [-997, 603], "243": [-1054, 603], "244": [-1054, 697],
+                "245": [-997, 697], "246": [-997, 755], "247": [-930, 755], "248": [-930, 699],
+                "249": [-930, 604], "250": [-991, 477], "251": [-902, 477], "252": [-902, 418],
+                "253": [-930, 418], "254": [-870, 418], "255": [-870, 357], "256": [-800, 357],
+                "257": [-800, 382], "258": [-800, 479], "259": [-743, 540], "260": [-800, 540],
+                "261": [-930, 540], "262": [-800, 637], "263": [-867, 637], "264": [-867, 699],
+                "265": [-800, 699], "266": [-743, 699], "267": [-800, 755], "268": [-900, 755],
+                "269": [-900, 822], "270": [-870, 822], "271": [-928, 822], "272": [-928, 852],
+                "273": [-992, 852], "274": [-992, 829], "275": [-870, 854], "276": [-870, 917],
+                "277": [-928, 917], "278": [-928, 947], "279": [-961, 947], "280": [-991, 947],
+                "281": [-991, 916], "282": [-961, 1009], "283": [-932, 1009], "284": [-932, 1041],
+                "285": [-870, 1041], "286": [-870, 1163], "287": [-931, 1163], "288": [-931, 1105],
+                "289": [-990, 1105], "290": [-993, 1163], "291": [-990, 1071], "292": [-809, 1163],
+                "293": [-809, 1137], "294": [-683, 1137], "295": [-683, 1166], "296": [-621, 1166],
+                "297": [-621, 1075], "298": [-870, 1074], "299": [-770, 1074], "300": [-770, 1043],
+                "301": [-770, 950], "302": [-807, 950], "303": [-807, 887], "304": [-807, 854],
+                "305": [-747, 887], "306": [-747, 792], "307": [-708, 792], "308": [-683, 1076],
+                "309": [-708, 1076], "310": [-708, 1044], "311": [-708, 949], "312": [-683, 949],
+                "313": [-683, 856], "314": [-620, 856], "315": [-587, 856], "316": [-620, 792],
+                "317": [-587, 917], "318": [-617, 917], "319": [-617, 982], "320": [-240, 75.0]
+            };
+
+            var modoBloqueoActivo = false;
+            var proximoInput = 'origen';
+            // Combinación de todos los puntos para iteración única
+            var todosLosNodos = Object.assign({}, puntosInteres, nodosTransito);
+
+            // Inyección de datos desde Flask (Jinja2)
+            // listaAislados: Nodos que no tienen conexiones (huérfanos)
+            var listaAislados = {{ aislados | default ([]) | tojson | safe }};
+            
+            // Gestión de bloqueos: Recupera el estado actual para sincronizar el mapa con el panel lateral
+            var bloqueadosStr = "{{ res.bloqueados_str if res else '' }}";
+            var listaBloqueados = bloqueadosStr ? bloqueadosStr.split(',') : [];
+
+            // Activa el estado de escucha para que el próximo clic en un nodo lo marque como obstáculo
+            function activarModoBloqueo() {
+                modoBloqueoActivo = true;
+                Toastify({
+                    text: "Haz clic en un nodo para añadirlo a la lista de obstáculos",
+                    duration: 3000,
+                    gravity: "top", 
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                }).showToast();
             }
-        });
 
-        // Dibujamos la linea que conecta los puntos
-        var polyline = L.polyline(caminoCoordenadas, {
-            color: '#e40000',
-            weight: 4,
-            opacity: 0.9,
-            dashArray: '10, 10',
-            lineJoin: 'round',
-            className: 'ruta-animada'
-        }).addTo(map);
+            // Resetea los bloqueos actuales enviando una cadena vacía al servidor
+            function limpiarBloqueos() {
+                document.getElementById('nodos_bloqueados_lista').value = "";
+                // Se asume que el formulario se llama 'form-mapa' según la Parte 2
+                document.getElementById('form-mapa').submit();
+            }
 
-        map.panTo(caminoCoordenadas[0]); // Enfocar el inicio
-    {% endif %}
+            // Sistema de confirmación para el Administrador (Protocolo de Restricción)
+            function confirmarBloqueoGlobal(event, btnElement) {
+                event.preventDefault(); // Detiene el envío inmediato
 
-    //Buscar en consola las coordenadas exactas al dar click sobre el mapa
-    map.on('click', function(e) {
-    var lat = e.latlng.lat.toFixed(1);
-    var lng = e.latlng.lng.toFixed(1);
-    console.log("Coordenada exacta: [" + lat + ", " + lng + "]");
-});
-function limpiarPanel() {
-    // Limpiamos los cuadros de texto
-    document.getElementById('origen').value = "";
-    document.getElementById('destino').value = "";
-    
-    // Reiniciamos el turno de selección al origen
-    proximoInput = 'origen';
-    
-    // Ocultamos la tarjeta flotante y el panel de trayectoria
-    const tarjeta = document.querySelector('.result-card');
-    const trayectoria = document.querySelector('.trayectoria-panel');
-    
-    if (tarjeta) tarjeta.style.display = 'none';
-    
-    // Recargamos el mensaje de "Esperando coordenadas" en el panel lateral
-    if (trayectoria) {
-        trayectoria.innerHTML = `
-            <p class="small text-center italic mt-3" style="color: #00d4ff; opacity: 0.7;">
-                Esperando coordenadas... Selecciona puntos en el mapa.
-            </p>`;
-    }
+                var existingToast = document.querySelector(".toast-confirm-container");
+                if (existingToast) return;
 
-    // La línea verde desaparece al limpiar
-    map.eachLayer(function (layer) {
-        if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
-            map.removeLayer(layer);
-        }
-    });
-}
-</script>
+                // Creación de la interfaz de confirmación estilo HUD industrial
+                var container = document.createElement("div");
+                container.className = "toast-confirm-container";
+                container.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <span style="font-weight: bold; color: #fff;">[ SISTEMA DE SEGURIDAD ]</span>
+                        <span style="color: #ffb84d;">¿CONFIRMAR BLOQUEO GLOBAL DE NODOS?</span>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 5px;">
+                            <button id="toast-cancel" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; font-family: inherit;">CANCELAR</button>
+                            <button id="toast-confirm" style="background: #ff0000; border: 1px solid #ff0000; color: #fff; padding: 5px 10px; font-weight: bold; cursor: pointer; font-family: inherit; box-shadow: 0 0 10px #ff0000;">CONFIRMAR</button>
+                        </div>
+                    </div>
+                `;
+
+                var toast = Toastify({
+                    node: container,
+                    duration: -1, // Permanente hasta que el usuario decida
+                    gravity: "top",
+                    position: "center",
+                    stopOnFocus: true,
+                    style: {
+                        background: "rgba(20, 0, 0, 0.95)",
+                        border: "2px solid #ff0000",
+                        color: "#fff",
+                        fontFamily: "'VT323', monospace",
+                        fontSize: "1.1rem",
+                        boxShadow: "0 0 50px rgba(255, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 0, 0.2)",
+                        maxWidth: "400px",
+                        padding: "20px"
+                    }
+                }).showToast();
+
+                // Lógica de botones dentro del Toast
+                container.querySelector("#toast-confirm").onclick = function () {
+                    toast.hideToast();
+                    var form = document.getElementById("form-mapa");
+                    var formaction = btnElement.getAttribute("formaction");
+                    if (formaction) {
+                        form.action = formaction;
+                    }
+                    form.submit();
+                };
+
+                container.querySelector("#toast-cancel").onclick = function () {
+                    toast.hideToast();
+                };
+            }
+
+            // Renderizado de Nodos y lógica de colorimetría según estado
+            Object.keys(todosLosNodos).forEach(function (key) {
+                var esInteres = puntosInteres.hasOwnProperty(key);
+                var esAislado = listaAislados.includes(key);
+
+                // Prioridad de estados: Bloqueo Global (Admin) > Bloqueo Local (Sesión)
+                var esBloqueoGlobal = {{ bloqueos_globales | default ([]) | tojson | safe }}.includes(key);
+                var esBloqueoLocal = listaBloqueados.includes(key);
+                var esBloqueado = esBloqueoGlobal || esBloqueoLocal;
+
+                // Definición visual del nodo
+                var colorNodo = "#007bff"; // Azul por defecto (Tránsito)
+                if (esBloqueoGlobal) colorNodo = "#ff0000";      // Rojo (Restricción Total)
+                else if (esBloqueoLocal) colorNodo = "#4f00be";  // Morado (Evitar en ruta)
+                else if (esInteres) colorNodo = "#f7ad3d";       // Naranja (Punto de interés)
+                else if (esAislado) colorNodo = "#ffff00";       // Amarillo (Error de conexión)
+
+            // --- Continuación de la lógica de renderizado por cada nodo ---
+            var radioNodo = esBloqueado ? 9 : (esAislado ? 8 : (esInteres ? 7 : 5));
+
+            var marker = L.circleMarker(todosLosNodos[key], {
+                radius: radioNodo,
+                fillColor: colorNodo,
+                color: esBloqueoGlobal ? "#ff0000" : "#ffffff",
+                weight: esBloqueoGlobal ? 4 : 2, // Borde resaltado para restricciones del admin
+                fillOpacity: 0.9,
+                className: esBloqueado ? 'pulsating-marker' : '' // Animación CSS definida en la Parte 1
+            }).addTo(map).bindTooltip(
+                esBloqueoGlobal ? "[ ACCESO DENEGADO POR ADMIN ]: " + key :
+                    (esBloqueoLocal ? "[ OBSTÁCULO TEMPORAL ]: " + key : "[ NODO ]: " + key)
+            );
+
+            // Manejador de clics en los nodos
+            marker.on('click', function () {
+                if (modoBloqueoActivo) {
+                    // Lógica para añadir obstáculos dinámicamente
+                    if (!listaBloqueados.includes(key)) {
+                        listaBloqueados.push(key);
+                        document.getElementById('nodos_bloqueados_lista').value = listaBloqueados.join(',');
+                        document.getElementById('visual-bloqueos').innerText = listaBloqueados.join(', ');
+                        marker.setStyle({
+                            fillColor: '#ff8c00',
+                            radius: 9,
+                            color: '#ff0000',
+                            weight: 3
+                        });
+                    }
+                    modoBloqueoActivo = false; // Desactivar modo tras la selección
+                } else {
+                    // Selección normal de Origen y Destino
+                    document.getElementById(proximoInput).value = key;
+                    proximoInput = (proximoInput === 'origen') ? 'destino' : 'origen';
+                }
+            });
+            }); // Fin del forEach de nodos
+
+            // --- Renderizado de la Ruta Optimizada ---
+            {% if res and res.camino_nodos %}
+            var caminoCoordenadas = [];
+            var nombresNodos = {{ res.camino_nodos | tojson }}; 
+
+            nombresNodos.forEach(function (nombre) {
+                if (todosLosNodos[nombre]) {
+                    caminoCoordenadas.push(todosLosNodos[nombre]);
+                }
+            });
+
+            // Dibujo de la Polyline animada
+            var polyline = L.polyline(caminoCoordenadas, {
+                color: '#e40000',
+                weight: 4,
+                opacity: 0.9,
+                dashArray: '10, 10',
+                lineJoin: 'round',
+                className: 'ruta-animada'
+            }).addTo(map);
+
+            map.panTo(caminoCoordenadas[0]); // Centrar cámara al inicio del camino
+            {% endif %}
+
+            // Herramienta de desarrollo: Coordenadas en consola
+            map.on('click', function (e) {
+                var lat = e.latlng.lat.toFixed(1);
+                var lng = e.latlng.lng.toFixed(1);
+                console.log("Coordenada exacta: [" + lat + ", " + lng + "]");
+            });
+
+            // Limpieza visual de la interfaz
+            function limpiarPanel() {
+                document.getElementById('origen').value = "";
+                document.getElementById('destino').value = "";
+                proximoInput = 'origen';
+
+                const tarjeta = document.querySelector('.result-card');
+                const trayectoria = document.querySelector('.trayectoria-panel');
+
+                if (tarjeta) tarjeta.style.display = 'none';
+
+                if (trayectoria) {
+                    trayectoria.innerHTML = `
+                        <p class="small text-center italic mt-3" style="color: #00d4ff; opacity: 0.7;">
+                            Esperando coordenadas... Selecciona puntos en el mapa.
+                        </p>`;
+                }
+
+                // Eliminar cualquier línea de ruta del mapa
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+                        map.removeLayer(layer);
+                    }
+                });
+            }
+        </script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script>
+            // Muestra alertas enviadas desde Flask (ej: "Nodo bloqueado con éxito")
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            var msg = {{ message | tojson }};
+            Toastify({
+                text: msg,
+                duration: 4000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    fontFamily: "'VT323', monospace",
+                    fontSize: "1.2rem",
+                    border: "1px solid #fff"
+                },
+            }).showToast();
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            // Manejo de errores específicos del algoritmo Dijkstra
+            {% if res and res.error %}
+            var errorMsg = {{ res.error | tojson }};
+            Toastify({
+                text: "ERROR DE RUTA: " + errorMsg,
+                duration: 4000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    fontFamily: "'VT323', monospace",
+                    fontSize: "1.2rem",
+                    border: "1px solid #ff0000"
+                },
+            }).showToast();
+            {% endif %}
+        </script>
 </body>
 </html>
