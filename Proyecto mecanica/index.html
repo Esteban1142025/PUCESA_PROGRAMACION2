@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Mecánica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            text-align: center;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav button {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 16px;
+            margin: 0 15px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        nav button:hover {
+            background-color: #34495e;
+        }
+        nav button.active {
+            background-color: #3498db;
+        }
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Panel Administrativo - Mecánica</h1>
+            <nav>
+                <button onclick="showSection('lista')" id="btn-lista" class="active">Ver Usuarios</button>
+                <button onclick="showSection('crear')" id="btn-crear">Nuevo Usuario</button>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div id="alert-success" class="alert alert-success"></div>
+        <div id="alert-error" class="alert alert-error"></div>
+        
+        <!-- Sección: Lista de Usuarios -->
+        <div id="section-lista">
+            <h2>Lista de Usuarios</h2>
+            <div id="loading" class="loading">Cargando usuarios...</div>
+            <div id="tabla-container" class="hidden">
+                <table id="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Vehículo</th>
+                            <th>Patente</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body">
+                    </tbody>
+                </table>
+                <div id="no-usuarios" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    No hay usuarios registrados. 
+                    <button onclick="showSection('crear')" class="btn btn-primary" style="margin-left: 10px;">Crea el primero aquí</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección: Crear Usuario -->
+        <div id="section-crear" class="hidden">
+            <h2>Registrar Nuevo Usuario</h2>
+            <form id="form-usuario">
+                <h3>Datos Personales</h3>
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" required placeholder="Ej: +56912345678">
+                </div>
+                
+                <h3 style="margin-top: 30px;">Datos del Vehículo</h3>
+                <div class="form-group">
+                    <label for="marca">Marca:</label>
+                    <input type="text" id="marca" required placeholder="Ej: Toyota">
+                </div>
+                
+                <div class="form-group">
+                    <label for="modelo">Modelo:</label>
+                    <input type="text" id="modelo" required placeholder="Ej: Corolla">
+                </div>
+                
+                <div class="form-group">
+                    <label for="anio">Año:</label>
+                    <input type="number" id="anio" required min="1900" max="2030" placeholder="Ej: 2020">
+                </div>
+                
+                <div class="form-group">
+                    <label for="patente">Patente:</label>
+                    <input type="text" id="patente" required placeholder="Ej: ABC-123">
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="btn btn-success">Guardar Usuario</button>
+                    <button type="button" onclick="showSection('lista')" class="btn btn-primary" style="margin-left: 10px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRqkX5eaB2p515F9DlVPHv_OBiONO5niE",
+            authDomain: "proyecto-mecanica.firebaseapp.com",
+            projectId: "proyecto-mecanica",
+            storageBucket: "proyecto-mecanica.firebasestorage.app",
+            messagingSenderId: "806182861434",
+            appId: "1:806182861434:web:3d5f06c1c8ca94e93119c3",
+            measurementId: "G-BQ37NHDXV7"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const usuariosRef = collection(db, 'usuarios');
+
+        // Hacer funciones disponibles globalmente
+        window.firestoreDB = db;
+        window.usuariosRef = usuariosRef;
+        window.firestoreAddDoc = addDoc;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreDeleteDoc = deleteDoc;
+        window.firestoreDoc = doc;
+        window.firestoreOnSnapshot = onSnapshot;
+
+        // Cargar usuarios inicialmente
+        cargarUsuarios();
+    </script>
+
+    <script>
+        // Mostrar sección
+        function showSection(section) {
+            document.getElementById('section-lista').classList.add('hidden');
+            document.getElementById('section-crear').classList.add('hidden');
+            document.getElementById('btn-lista').classList.remove('active');
+            document.getElementById('btn-crear').classList.remove('active');
+            
+            document.getElementById('section-' + section).classList.remove('hidden');
+            document.getElementById('btn-' + section).classList.add('active');
+            
+            if (section === 'lista') {
+                cargarUsuarios();
+            }
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            const alertId = type === 'success' ? 'alert-success' : 'alert-error';
+            const alertElement = document.getElementById(alertId);
+            alertElement.textContent = message;
+            alertElement.style.display = 'block';
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 3000);
+        }
+
+        // Cargar usuarios desde Firestore
+        async function cargarUsuarios() {
+            const loading = document.getElementById('loading');
+            const tablaContainer = document.getElementById('tabla-container');
+            const tablaBody = document.getElementById('tabla-body');
+            const noUsuarios = document.getElementById('no-usuarios');
+            
+            loading.classList.remove('hidden');
+            tablaContainer.classList.add('hidden');
+            
+            try {
+                const querySnapshot = await window.firestoreGetDocs(window.usuariosRef);
+                tablaBody.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    noUsuarios.classList.remove('hidden');
+                    document.getElementById('tabla-usuarios').classList.add('hidden');
+                } else {
+                    noUsuarios.classList.add('hidden');
+                    document.getElementById('tabla-usuarios').classList.remove('hidden');
+                    
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${data.nombre}</td>
+                            <td>${data.telefono}</td>
+                            <td>${data.vehiculo.marca} ${data.vehiculo.modelo} (${data.vehiculo.anio})</td>
+                            <td>${data.vehiculo.patente}</td>
+                            <td>
+                                <span style="color: ${data.estado === 'activo' ? 'green' : 'red'}; font-weight: bold;">
+                                    ${data.estado.charAt(0).toUpperCase() + data.estado.slice(1)}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" onclick="eliminarUsuario('${doc.id}')">Eliminar</button>
+                            </td>
+                        `;
+                        tablaBody.appendChild(row);
+                    });
+                }
+                
+                loading.classList.add('hidden');
+                tablaContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error al cargar usuarios:', error);
+                showAlert('Error al cargar usuarios: ' + error.message, 'error');
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Crear usuario
+        document.getElementById('form-usuario').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const marca = document.getElementById('marca').value;
+            const modelo = document.getElementById('modelo').value;
+            const anio = parseInt(document.getElementById('anio').value);
+            const patente = document.getElementById('patente').value;
+            
+            try {
+                await window.firestoreAddDoc(window.usuariosRef, {
+                    nombre: nombre,
+                    telefono: telefono,
+                    vehiculo: {
+                        marca: marca,
+                        modelo: modelo,
+                        anio: anio,
+                        patente: patente
+                    },
+                    fecha_registro: new Date().toISOString(),
+                    estado: 'activo'
+                });
+                
+                showAlert('Usuario creado exitosamente', 'success');
+                document.getElementById('form-usuario').reset();
+                showSection('lista');
+            } catch (error) {
+                console.error('Error al crear usuario:', error);
+                showAlert('Error al crear usuario: ' + error.message, 'error');
+            }
+        });
+
+        // Eliminar usuario
+        async function eliminarUsuario(usuarioId) {
+            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+                try {
+                    await window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'usuarios', usuarioId));
+                    showAlert('Usuario eliminado exitosamente', 'success');
+                    cargarUsuarios();
+                } catch (error) {
+                    console.error('Error al eliminar usuario:', error);
+                    showAlert('Error al eliminar usuario: ' + error.message, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
