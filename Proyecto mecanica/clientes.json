@@ -1,0 +1,25 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nombres": "Juan",
+      "apellidos": "Pérez García",
+      "identificacion": "12345678-9",
+      "telefono": "+56912345678",
+      "whatsapp": "+56912345678",
+      "correo": "juan.perez@example.com",
+      "direccion": "Calle Principal 123, Santiago",
+      "medio_notificacion": "correo",
+      "vehiculos": [
+        {
+          "marca": "Toyota",
+          "modelo": "Corolla",
+          "anio": 2020,
+          "patente": "ABC-123"
+        }
+      ],
+      "fecha_registro": "2026-10-22T10:30:00.000Z",
+      "estado": "activo"
+    }
+  ]
+}

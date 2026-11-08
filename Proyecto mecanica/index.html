@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrativo - Mecánica</title>
+    <title>Sistema de Gestión de Taller Automotriz</title>
     <style>
         * {
             margin: 0;
@@ -147,35 +147,336 @@
         .hidden {
             display: none;
         }
+
+        /* Estados del vehículo */
+        .estado-pendiente {
+            background-color: #ffc107;
+            color: black;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .estado-diagnostico {
+            background-color: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .estado-reparacion {
+            background-color: #fd7e14;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .estado-repuestos {
+            background-color: #6f42c1;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .estado-listo {
+            background-color: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .estado-entregado {
+            background-color: #6c757d;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Responsive Design - Tablet */
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            nav button {
+                font-size: 14px;
+                margin: 0 10px;
+                padding: 5px 8px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Responsive Design - Mobile */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            /* Navegación en móvil */
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 15px;
+            }
+
+            nav button {
+                font-size: 13px;
+                margin: 0;
+                padding: 8px 12px;
+                min-height: 44px;
+                flex: 1 1 auto;
+                min-width: 120px;
+                max-width: 200px;
+            }
+
+            /* Tablas con scroll horizontal */
+            .tabla-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                font-size: 12px;
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+                white-space: nowrap;
+            }
+
+            /* Formularios */
+            form {
+                padding: 20px 15px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            label {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            input, select, textarea {
+                font-size: 16px; /* Evita zoom en iOS */
+                padding: 12px;
+                min-height: 44px;
+            }
+
+            /* Botones */
+            .btn {
+                padding: 12px 20px;
+                font-size: 16px;
+                min-height: 44px;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .btn-sm {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-height: 36px;
+            }
+
+            /* Alertas */
+            .alert {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            /* Estados del vehículo */
+            .estado-pendiente,
+            .estado-diagnostico,
+            .estado-reparacion,
+            .estado-repuestos,
+            .estado-listo,
+            .estado-entregado {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+
+            /* Configuración de visibilidad */
+            #campos-checklist,
+            #visibilidad-checklist {
+                grid-template-columns: 1fr;
+            }
+
+            /* Checkboxes */
+            label[style*="display: flex"] {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            label[style*="display: flex"] input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }
+
+            /* Acciones */
+            .actions {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .actions .btn {
+                margin-left: 0 !important;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 18px;
+            }
+
+            nav button {
+                font-size: 12px;
+                min-width: 100px;
+                padding: 6px 10px;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            th, td {
+                padding: 6px 4px;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Panel Administrativo - Mecánica</h1>
-            <nav>
-                <button onclick="showSection('lista')" id="btn-lista" class="active">Ver Usuarios</button>
-                <button onclick="showSection('crear')" id="btn-crear">Nuevo Usuario</button>
+            <h1>Sistema de Gestión de Taller Automotriz</h1>
+            <nav id="nav-admin" class="hidden">
+                <button onclick="showSection('lista')" id="btn-lista" class="active">Ver Clientes</button>
+                <button onclick="showSection('crear')" id="btn-crear">Nuevo Cliente</button>
+                <button onclick="showSection('vehiculos')" id="btn-vehiculos">Ver Vehículos</button>
+                <button onclick="showSection('nuevo-vehiculo')" id="btn-nuevo-vehiculo">Nuevo Vehículo</button>
+                <button onclick="showSection('mantenimientos')" id="btn-mantenimientos">Ver Mantenimientos</button>
+                <button onclick="showSection('nuevo-mantenimiento')" id="btn-nuevo-mantenimiento">Nuevo Mantenimiento</button>
+                <button onclick="showSection('seguimiento')" id="btn-seguimiento">Seguimiento de Estados</button>
+                <button onclick="showSection('config-visibilidad')" id="btn-config-visibilidad">Configurar Visibilidad</button>
+                <button onclick="logout()" class="btn btn-danger" style="margin-left: 20px;">Cerrar Sesión</button>
+            </nav>
+            <nav id="nav-usuario" class="hidden">
+                <button onclick="showSection('mis-vehiculos')" id="btn-mis-vehiculos" class="active">Mis Vehículos</button>
+                <button onclick="showSection('agregar-vehiculo')" id="btn-agregar-vehiculo">Agregar Vehículo</button>
+                <button onclick="logout()" class="btn btn-danger" style="margin-left: 20px;">Cerrar Sesión</button>
             </nav>
         </div>
     </header>
-    
+
     <div class="container">
         <div id="alert-success" class="alert alert-success"></div>
         <div id="alert-error" class="alert alert-error"></div>
-        
-        <!-- Sección: Lista de Usuarios -->
+
+        <!-- Sección: Login -->
+        <div id="section-login">
+            <div style="max-width: 400px; margin: 50px auto; background-color: white; padding: 30px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <h2 style="text-align: center; margin-bottom: 20px;">Iniciar Sesión</h2>
+                <form id="form-login">
+                    <div class="form-group">
+                        <label for="login-email">Correo Electrónico:</label>
+                        <input type="email" id="login-email" required placeholder="ej: admin@taller.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña:</label>
+                        <input type="password" id="login-password" required placeholder="******">
+                    </div>
+                    <div class="actions">
+                        <button type="submit" class="btn btn-success" style="width: 100%;">Iniciar Sesión</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">
+                        ¿No tienes cuenta? <a href="#" onclick="showSection('registro')" style="color: #3498db;">Regístrate aquí</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sección: Registro -->
+        <div id="section-registro" class="hidden">
+            <div style="max-width: 400px; margin: 50px auto; background-color: white; padding: 30px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <h2 style="text-align: center; margin-bottom: 20px;">Registrarse</h2>
+                <form id="form-registro">
+                    <div class="form-group">
+                        <label for="reg-email">Correo Electrónico:</label>
+                        <input type="email" id="reg-email" required placeholder="ej: usuario@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Contraseña:</label>
+                        <input type="password" id="reg-password" required placeholder="******" minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-rol">Rol:</label>
+                        <select id="reg-rol" required>
+                            <option value="usuario">Usuario (Cliente)</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="actions">
+                        <button type="submit" class="btn btn-success" style="width: 100%;">Registrarse</button>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">
+                        ¿Ya tienes cuenta? <a href="#" onclick="showSection('login')" style="color: #3498db;">Inicia sesión aquí</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sección: Lista de Clientes -->
         <div id="section-lista">
-            <h2>Lista de Usuarios</h2>
-            <div id="loading" class="loading">Cargando usuarios...</div>
-            <div id="tabla-container" class="hidden">
+            <h2>Lista de Clientes</h2>
+            <div id="loading" class="loading">Cargando clientes desde Firebase...</div>
+            <div id="tabla-container" class="hidden tabla-container">
                 <table id="tabla-usuarios">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
+                            <th>Nombre Completo</th>
+                            <th>Identificación</th>
                             <th>Teléfono</th>
+                            <th>Correo</th>
                             <th>Vehículo</th>
-                            <th>Patente</th>
+                            <th>Matrícula</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -184,7 +485,7 @@
                     </tbody>
                 </table>
                 <div id="no-usuarios" class="hidden" style="text-align: center; padding: 40px; color: #666;">
-                    No hay usuarios registrados. 
+                    No hay clientes registrados.
                     <button onclick="showSection('crear')" class="btn btn-primary" style="margin-left: 10px;">Crea el primero aquí</button>
                 </div>
             </div>
@@ -192,52 +493,432 @@
         
         <!-- Sección: Crear Usuario -->
         <div id="section-crear" class="hidden">
-            <h2>Registrar Nuevo Usuario</h2>
+            <h2>Registrar Nuevo Cliente</h2>
             <form id="form-usuario">
                 <h3>Datos Personales</h3>
                 <div class="form-group">
-                    <label for="nombre">Nombre Completo:</label>
-                    <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    <label for="nombres">Nombres:</label>
+                    <input type="text" id="nombres" required placeholder="Ej: Juan">
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" required placeholder="Ej: Pérez García">
+                </div>
+
+                <div class="form-group">
+                    <label for="identificacion">Número de Identificación (RUT/DNI/Cédula):</label>
+                    <input type="text" id="identificacion" required placeholder="Ej: 12345678-9">
+                </div>
+
                 <div class="form-group">
                     <label for="telefono">Teléfono:</label>
                     <input type="tel" id="telefono" required placeholder="Ej: +56912345678">
                 </div>
-                
-                <h3 style="margin-top: 30px;">Datos del Vehículo</h3>
+
                 <div class="form-group">
-                    <label for="marca">Marca:</label>
-                    <input type="text" id="marca" required placeholder="Ej: Toyota">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" required placeholder="Ej: juan.perez@example.com">
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="modelo">Modelo:</label>
-                    <input type="text" id="modelo" required placeholder="Ej: Corolla">
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" id="direccion" required placeholder="Ej: Calle Principal 123, Santiago">
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="anio">Año:</label>
-                    <input type="number" id="anio" required min="1900" max="2030" placeholder="Ej: 2020">
+                    <label for="medio_notificacion">Medio de Notificación:</label>
+                    <input type="text" id="medio_notificacion" value="correo" readonly style="background-color: #f0f0f0;">
+                    <small style="color: #666;">Las notificaciones se enviarán por correo electrónico</small>
                 </div>
-                
-                <div class="form-group">
-                    <label for="patente">Patente:</label>
-                    <input type="text" id="patente" required placeholder="Ej: ABC-123">
-                </div>
-                
-                <div class="actions">
-                    <button type="submit" class="btn btn-success">Guardar Usuario</button>
+
+                <p style="margin-top: 20px; color: #888; font-style: italic;">💡 Para registrar vehículos usa el módulo <strong>"Nuevo Vehículo"</strong> después de crear el cliente.</p>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Guardar Cliente</button>
                     <button type="button" onclick="showSection('lista')" class="btn btn-primary" style="margin-left: 10px;">Cancelar</button>
                 </div>
             </form>
         </div>
+
+        <!-- Sección: Lista de Vehículos -->
+        <div id="section-vehiculos" class="hidden">
+            <h2>Lista de Vehículos</h2>
+            <div id="loading-vehiculos" class="loading">Cargando vehículos...</div>
+            <div id="tabla-container-vehiculos" class="hidden tabla-container">
+                <table id="tabla-vehiculos">
+                    <thead>
+                        <tr>
+                            <th>Propietario</th>
+                            <th>Placa</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Color</th>
+                            <th>Kilometraje</th>
+                            <th>Combustible</th>
+                            <th>VIN</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body-vehiculos">
+                    </tbody>
+                </table>
+                <div id="no-vehiculos" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    No hay vehículos registrados.
+                    <button onclick="showSection('nuevo-vehiculo')" class="btn btn-primary" style="margin-left: 10px;">Registra el primero aquí</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Nuevo Vehículo -->
+        <div id="section-nuevo-vehiculo" class="hidden">
+            <h2>Registrar Nuevo Vehículo</h2>
+            <form id="form-vehiculo">
+                <h3>Datos del Propietario</h3>
+                <div class="form-group">
+                    <label for="propietario">Propietario:</label>
+                    <select id="propietario" required>
+                        <option value="">Seleccionar cliente...</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-top: 30px;">Datos del Vehículo</h3>
+                <div class="form-group">
+                    <label for="placa">Placa:</label>
+                    <input type="text" id="placa" required placeholder="Ej: ABC-123">
+                </div>
+
+                <div class="form-group">
+                    <label for="v-marca">Marca:</label>
+                    <input type="text" id="v-marca" required placeholder="Ej: Toyota">
+                </div>
+
+                <div class="form-group">
+                    <label for="v-modelo">Modelo:</label>
+                    <input type="text" id="v-modelo" required placeholder="Ej: Corolla">
+                </div>
+
+                <div class="form-group">
+                    <label for="v-anio">Año de Fabricación:</label>
+                    <input type="number" id="v-anio" required min="1900" max="2030" placeholder="Ej: 2020">
+                </div>
+
+                <div class="form-group">
+                    <label for="color">Color:</label>
+                    <input type="text" id="color" required placeholder="Ej: Blanco">
+                </div>
+
+                <div class="form-group">
+                    <label for="kilometraje">Kilometraje Actual:</label>
+                    <input type="number" id="kilometraje" required min="0" placeholder="Ej: 50000">
+                </div>
+
+                <div class="form-group">
+                    <label for="combustible">Tipo de Combustible:</label>
+                    <select id="combustible" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="gasolina">Gasolina</option>
+                        <option value="diesel">Diésel</option>
+                        <option value="electrico">Eléctrico</option>
+                        <option value="hibrido">Híbrido</option>
+                        <option value="gas">Gas</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="vin">Número de Chasis (VIN):</label>
+                    <input type="text" id="vin" required placeholder="Ej: 1HGCM82633A123456">
+                </div>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Guardar Vehículo</button>
+                    <button type="button" onclick="showSection('vehiculos')" class="btn btn-primary" style="margin-left: 10px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sección: Mis Vehículos (Vista de Usuario) -->
+        <div id="section-mis-vehiculos" class="hidden">
+            <h2>Mis Vehículos</h2>
+            <div id="loading-mis-vehiculos" class="loading">Cargando mis vehículos...</div>
+            <div id="tabla-container-mis-vehiculos" class="hidden tabla-container">
+                <table id="tabla-mis-vehiculos">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Color</th>
+                            <th>Kilometraje</th>
+                            <th>Combustible</th>
+                            <th>VIN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body-mis-vehiculos">
+                    </tbody>
+                </table>
+                <div id="no-mis-vehiculos" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    No tienes vehículos registrados.
+                    <button onclick="showSection('agregar-vehiculo')" class="btn btn-primary" style="margin-left: 10px;">Agrega tu primer vehículo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Agregar Vehículo (Vista de Usuario) -->
+        <div id="section-agregar-vehiculo" class="hidden">
+            <h2>Agregar Nuevo Vehículo</h2>
+            <form id="form-agregar-vehiculo">
+                <h3>Datos del Vehículo</h3>
+                <div class="form-group">
+                    <label for="uv-placa">Placa:</label>
+                    <input type="text" id="uv-placa" required placeholder="Ej: ABC-123">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-marca">Marca:</label>
+                    <input type="text" id="uv-marca" required placeholder="Ej: Toyota">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-modelo">Modelo:</label>
+                    <input type="text" id="uv-modelo" required placeholder="Ej: Corolla">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-anio">Año de Fabricación:</label>
+                    <input type="number" id="uv-anio" required min="1900" max="2030" placeholder="Ej: 2020">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-color">Color:</label>
+                    <input type="text" id="uv-color" required placeholder="Ej: Blanco">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-kilometraje">Kilometraje Actual:</label>
+                    <input type="number" id="uv-kilometraje" required min="0" placeholder="Ej: 50000">
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-combustible">Tipo de Combustible:</label>
+                    <select id="uv-combustible" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="gasolina">Gasolina</option>
+                        <option value="diesel">Diésel</option>
+                        <option value="electrico">Eléctrico</option>
+                        <option value="hibrido">Híbrido</option>
+                        <option value="gas">Gas</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="uv-vin">Número de Chasis (VIN):</label>
+                    <input type="text" id="uv-vin" required placeholder="Ej: 1HGCM82633A123456">
+                </div>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Guardar Vehículo</button>
+                    <button type="button" onclick="showSection('mis-vehiculos')" class="btn btn-primary" style="margin-left: 10px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sección: Lista de Mantenimientos -->
+        <div id="section-mantenimientos" class="hidden">
+            <h2>Lista de Mantenimientos</h2>
+            <div id="loading-mantenimientos" class="loading">Cargando mantenimientos...</div>
+            <div id="tabla-container-mantenimientos" class="hidden tabla-container">
+                <table id="tabla-mantenimientos">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Vehículo</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Técnico</th>
+                            <th>Estado</th>
+                            <th>Costo Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body-mantenimientos">
+                    </tbody>
+                </table>
+                <div id="no-mantenimientos" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    No hay mantenimientos registrados.
+                    <button onclick="showSection('nuevo-mantenimiento')" class="btn btn-primary" style="margin-left: 10px;">Registra el primero aquí</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Nuevo Mantenimiento -->
+        <div id="section-nuevo-mantenimiento" class="hidden">
+            <h2>Registrar Nuevo Mantenimiento</h2>
+            <form id="form-mantenimiento">
+                <h3>Datos del Vehículo</h3>
+                <div class="form-group">
+                    <label for="mant-vehiculo">Vehículo:</label>
+                    <select id="mant-vehiculo" required>
+                        <option value="">Seleccionar vehículo...</option>
+                    </select>
+                </div>
+
+                <h3 style="margin-top: 30px;">Datos del Mantenimiento</h3>
+                <div class="form-group">
+                    <label for="mant-tipo">Tipo de Mantenimiento:</label>
+                    <select id="mant-tipo" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="preventivo">Preventivo</option>
+                        <option value="correctivo">Correctivo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-descripcion">Descripción del Problema o Servicio Solicitado:</label>
+                    <textarea id="mant-descripcion" required rows="3" placeholder="Describa el problema o servicio..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-diagnostico">Diagnóstico Técnico:</label>
+                    <textarea id="mant-diagnostico" rows="2" placeholder="Diagnóstico técnico..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-tecnico">Nombre o Identificador del Técnico:</label>
+                    <input type="text" id="mant-tecnico" required placeholder="Ej: Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-servicios">Servicios Realizados:</label>
+                    <textarea id="mant-servicios" rows="2" placeholder="Lista de servicios realizados..."></textarea>
+                </div>
+
+                <h3 style="margin-top: 30px;">Costos</h3>
+                <div class="form-group">
+                    <label for="mant-repuestos">Repuestos Utilizados:</label>
+                    <textarea id="mant-repuestos" rows="2" placeholder="Lista de repuestos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-mano_obra">Costo de Mano de Obra:</label>
+                    <input type="number" id="mant-mano_obra" required min="0" step="0.01" placeholder="Ej: 150.00">
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-costo_repuestos">Costo de Repuestos:</label>
+                    <input type="number" id="mant-costo_repuestos" required min="0" step="0.01" placeholder="Ej: 200.00">
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-impuestos">Impuestos:</label>
+                    <input type="number" id="mant-impuestos" required min="0" step="0.01" placeholder="Ej: 43.00">
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-fecha_estimada">Fecha Estimada de Entrega:</label>
+                    <input type="date" id="mant-fecha_estimada" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-fecha_real">Fecha Real de Entrega:</label>
+                    <input type="date" id="mant-fecha_real">
+                </div>
+
+                <div class="form-group">
+                    <label for="mant-estado">Estado del Vehículo:</label>
+                    <select id="mant-estado" required>
+                        <option value="pendiente">🟡 Pendiente</option>
+                        <option value="diagnostico">🔵 En diagnóstico</option>
+                        <option value="reparacion">🟠 En reparación</option>
+                        <option value="repuestos">🟣 Esperando repuestos</option>
+                        <option value="listo">🟢 Listo para entrega</option>
+                        <option value="entregado">✅ Entregado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Valor Total a Pagar:</label>
+                    <input type="text" id="mant-valor_total" readonly style="background-color: #f0f0f0; font-weight: bold;">
+                    <small style="color: #666;">Calculado automáticamente</small>
+                </div>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Registrar Mantenimiento</button>
+                    <button type="button" onclick="showSection('mantenimientos')" class="btn btn-primary" style="margin-left: 10px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sección: Seguimiento de Estados -->
+        <div id="section-seguimiento" class="hidden">
+            <h2>Seguimiento de Estados de Vehículos</h2>
+            <div id="loading-seguimiento" class="loading">Cargando seguimiento...</div>
+            <div id="tabla-container-seguimiento" class="hidden tabla-container">
+                <table id="tabla-seguimiento">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Vehículo</th>
+                            <th>Propietario</th>
+                            <th>Estado Actual</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Técnico</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body-seguimiento">
+                    </tbody>
+                </table>
+                <div id="no-seguimiento" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    No hay mantenimientos en seguimiento.
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Configurar Visibilidad -->
+        <div id="section-config-visibilidad" class="hidden">
+            <h2>Configurar Visibilidad de Campos por Usuario</h2>
+            <p style="margin-bottom: 20px; color: #666;">Selecciona qué campos podrá ver cada usuario específico.</p>
+
+            <div style="margin-bottom: 30px;">
+                <h3>Seleccionar Usuario:</h3>
+                <select id="visibilidad-usuario" onchange="cargarConfiguracionVisibilidad()" style="width: 100%; max-width: 400px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="">Seleccionar usuario...</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3>Tipo de Datos:</h3>
+                <select id="visibilidad-tipo" onchange="cargarConfiguracionVisibilidad()" style="width: 100%; max-width: 300px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    <option value="mis_vehiculos">Mis Vehículos</option>
+                    <option value="mis_mantenimientos">Mis Mantenimientos</option>
+                </select>
+            </div>
+
+            <div id="visibilidad-campos-container">
+                <h3>Campos visibles para este usuario:</h3>
+                <div id="visibilidad-checklist" style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px;">
+                </div>
+            </div>
+
+            <div class="actions" style="margin-top: 30px;">
+                <button onclick="guardarConfiguracionVisibilidad()" class="btn btn-success">Guardar Configuración</button>
+                <button onclick="cargarConfiguracionVisibilidad()" class="btn btn-secondary" style="margin-left: 10px;">Recargar</button>
+            </div>
+        </div>
     </div>
+
+    <!-- EmailJS SDK (Cargar antes de Firebase para evitar conflictos) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // Configuración de Firebase
         const firebaseConfig = {
@@ -253,35 +934,481 @@
         // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const usuariosRef = collection(db, 'usuarios');
+        const auth = getAuth(app);
+        const clientesRef = collection(db, 'usuarios');
+        const vehiculosRef = collection(db, 'vehiculos');
 
         // Hacer funciones disponibles globalmente
         window.firestoreDB = db;
-        window.usuariosRef = usuariosRef;
+        window.firestoreAuth = auth;
+        window.clientesRef = clientesRef;
+        window.vehiculosRef = vehiculosRef;
+        window.mantenimientosRef = collection(db, 'mantenimientos');
+        window.notificacionesRef = collection(db, 'notificaciones');
         window.firestoreAddDoc = addDoc;
         window.firestoreGetDocs = getDocs;
         window.firestoreDeleteDoc = deleteDoc;
         window.firestoreDoc = doc;
         window.firestoreOnSnapshot = onSnapshot;
-
-        // Cargar usuarios inicialmente
-        cargarUsuarios();
+        window.firestoreSetDoc = setDoc;
+        window.firestoreGetDoc = getDoc;
+        window.firestoreCollection = collection;
+        window.authSignIn = signInWithEmailAndPassword;
+        window.authCreateUser = createUserWithEmailAndPassword;
+        window.authSignOut = signOut;
+        window.authStateChanged = onAuthStateChanged;
     </script>
 
     <script>
+        // Variable global para almacenar los datos
+        let clientesData = { clientes: [] };
+        let contadorVehiculos = 0;
+        let currentUser = null;
+        let userRole = null; // 'admin' o 'usuario'
+
+        // Configuración de EmailJS
+        const EMAILJS_SERVICE_ID = 'service_4auq3i3'; // Service ID desde EmailJS
+        const EMAILJS_TEMPLATE_CONTRASENA = 'template_m4ukeep'; // Template para envío de contraseña
+        const EMAILJS_TEMPLATE_MANTENIMIENTO = 'template_nz2xvcw'; // Template para notificación de mantenimiento
+        const EMAILJS_PUBLIC_KEY = '1lj1-VXpOPEjkfZc7';
+
+        // Inicializar EmailJS
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
+
+        // Definición de campos disponibles para visibilidad del usuario
+        const CAMPOS_VISIBILIDAD = {
+            mis_vehiculos: [
+                { id: 'placa', label: 'Placa' },
+                { id: 'marca', label: 'Marca' },
+                { id: 'modelo', label: 'Modelo' },
+                { id: 'anio', label: 'Año' },
+                { id: 'color', label: 'Color' },
+                { id: 'kilometraje', label: 'Kilometraje' },
+                { id: 'combustible', label: 'Tipo de Combustible' },
+                { id: 'vin', label: 'VIN' },
+                { id: 'fecha_registro', label: 'Fecha de Registro' },
+                { id: 'estado', label: 'Estado' }
+            ],
+            mis_mantenimientos: [
+                { id: 'codigo', label: 'Código' },
+                { id: 'marca_vehiculo', label: 'Marca Vehículo' },
+                { id: 'modelo_vehiculo', label: 'Modelo Vehículo' },
+                { id: 'placa_vehiculo', label: 'Placa Vehículo' },
+                { id: 'fecha_ingreso', label: 'Fecha Ingreso' },
+                { id: 'tipo', label: 'Tipo' },
+                { id: 'descripcion', label: 'Descripción' },
+                { id: 'estado_vehiculo', label: 'Estado Vehículo' },
+                { id: 'valor_total', label: 'Valor Total' },
+                { id: 'fecha_estimada_entrega', label: 'Fecha Estimada' }
+            ]
+        };
+
+        // Configuración de visibilidad por defecto para usuarios
+        const VISIBILIDAD_DEFAULT = {
+            mis_vehiculos: ['placa', 'marca', 'modelo', 'anio', 'color', 'kilometraje'],
+            mis_mantenimientos: ['codigo', 'placa_vehiculo', 'marca_vehiculo', 'modelo_vehiculo', 'tipo', 'descripcion', 'estado_vehiculo', 'valor_total']
+        };
+
+        // Variable global para almacenar la configuración de visibilidad del usuario actual
+        let visibilidadUsuario = null;
+
+        // Generar contraseña aleatoria de 6 dígitos
+        function generarContrasena() {
+            const caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            let contrasena = '';
+            for (let i = 0; i < 6; i++) {
+                contrasena += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return contrasena;
+        }
+
+        // Enviar correo con contraseña
+        async function enviarContrasenaPorCorreo(email, contrasena, nombre) {
+            try {
+                if (typeof emailjs === 'undefined') {
+                    console.error('EmailJS no está cargado');
+                    return false;
+                }
+                await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_CONTRASENA,
+                    {
+                        to_email: email,
+                        from_name: 'Sistema de Gestión de Taller',
+                        to_name: nombre,
+                        contrasena: contrasena
+                    }
+                );
+                return true;
+            } catch (error) {
+                console.error('Error al enviar correo:', error);
+                return false;
+            }
+        }
+
+        // Enviar notificación de mantenimiento
+        async function enviarNotificacionMantenimiento(nombre, email, datos) {
+            try {
+                if (typeof emailjs === 'undefined') {
+                    console.error('EmailJS no está cargado');
+                    return false;
+                }
+                
+                await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_MANTENIMIENTO,
+                    {
+                        to_email: email,
+                        to_name: nombre,
+                        from_name: 'Sistema de Gestión de Taller',
+                        marca: datos.marca,
+                        modelo: datos.modelo,
+                        placa: datos.placa,
+                        tipo: datos.tipo,
+                        descripcion: datos.descripcion,
+                        estado: datos.estado,
+                        valor_total: datos.valor_total,
+                        fecha_estimada: datos.fecha_estimada || ''
+                    }
+                );
+                return true;
+            } catch (error) {
+                console.error('Error al enviar notificación:', error);
+                return false;
+            }
+        }
+
+        // Función auxiliar para obtener correo del propietario
+        async function obtenerCorreoPropietario(propietarioId) {
+            try {
+                const doc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'usuarios', propietarioId)
+                );
+                if (doc.exists()) {
+                    return doc.data().correo;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error al obtener correo:', error);
+                return null;
+            }
+        }
+
+        // ============================================
+        // FASE 5: GESTIÓN DE NOTIFICACIONES
+        // ============================================
+
+        // Crear notificación en Firestore
+        async function crearNotificacion(datos) {
+            try {
+                await esperarFirebaseInicializado();
+                const notificacionesRef = window.firestoreCollection(window.firestoreDB, 'notificaciones');
+                await window.firestoreAddDoc(notificacionesRef, datos);
+                console.log('Notificación creada en Firestore:', datos);
+            } catch (error) {
+                console.error('Error al crear notificación en Firestore:', error);
+            }
+        }
+
+        // Verificar si ya existe una notificación para evitar duplicados
+        async function verificarNotificacionDuplicada(evento, mantenimientoId) {
+            try {
+                await esperarFirebaseInicializado();
+                const notificacionesRef = window.firestoreCollection(window.firestoreDB, 'notificaciones');
+                const querySnapshot = await window.firestoreGetDocs(
+                    notificacionesRef
+                );
+
+                for (const doc of querySnapshot.docs) {
+                    const notif = doc.data();
+                    if (notif.evento === evento && notif.mantenimiento_id === mantenimientoId && notif.estado_envio !== 'fallido') {
+                        return true; // Ya existe una notificación pendiente o enviada
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error al verificar duplicados:', error);
+                return false;
+            }
+        }
+
+        // Enviar notificación y actualizar estado
+        async function enviarNotificacionYActualizarEstado(notificacionId, email, templateId, datosEmail) {
+            try {
+                // Enviar email
+                await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    templateId,
+                    datosEmail
+                );
+
+                // Actualizar estado a enviado
+                await window.firestoreSetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'notificaciones', notificacionId),
+                    {
+                        estado_envio: 'enviado',
+                        fecha_envio: new Date().toISOString()
+                    },
+                    { merge: true }
+                );
+
+                console.log('Notificación enviada exitosamente');
+                return true;
+            } catch (error) {
+                console.error('Error al enviar notificación:', error);
+
+                // Actualizar estado a fallido y registrar error
+                await window.firestoreSetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'notificaciones', notificacionId),
+                    {
+                        estado_envio: 'fallido',
+                        error: error.message,
+                        fecha_envio: new Date().toISOString()
+                    },
+                    { merge: true }
+                );
+
+                return false;
+            }
+        }
+
+        // ============================================
+        // EVENTO 1: RECEPCIÓN DEL VEHÍCULO
+        // ============================================
+        async function notificarRecepcionVehiculo(mantenimientoId, nombreCliente, placa, fechaIngreso, codigoOrden) {
+            try {
+                // Verificar duplicados
+                const esDuplicado = await verificarNotificacionDuplicada('recepcion_vehiculo', mantenimientoId);
+                if (esDuplicado) {
+                    console.log('Ya existe notificación de recepción para este mantenimiento');
+                    return;
+                }
+
+                // Obtener correo del propietario
+                const mantDoc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId)
+                );
+                const mantData = mantDoc.data();
+                const correo = await obtenerCorreoPropietario(mantData.vehiculo_id);
+
+                if (!correo) {
+                    console.error('No se encontró correo del propietario');
+                    return;
+                }
+
+                // Crear notificación en Firestore
+                const notificacionData = {
+                    destinatario: correo,
+                    nombre_destinatario: nombreCliente,
+                    canal_comunicacion: 'email',
+                    evento: 'recepcion_vehiculo',
+                    mensaje: {
+                        nombre_cliente: nombreCliente,
+                        placa: placa,
+                        fecha_ingreso: fechaIngreso,
+                        numero_orden: codigoOrden
+                    },
+                    fecha_generacion: new Date().toISOString(),
+                    estado_envio: 'pendiente',
+                    mantenimiento_id: mantenimientoId,
+                    tipo_notificacion: 'recepcion'
+                };
+
+                const docRef = await window.firestoreAddDoc(
+                    window.firestoreCollection(window.firestoreDB, 'notificaciones'),
+                    notificacionData
+                );
+
+                // Enviar email
+                await enviarNotificacionYActualizarEstado(docRef.id, correo, EMAILJS_TEMPLATE_MANTENIMIENTO, {
+                    to_email: correo,
+                    to_name: nombreCliente,
+                    from_name: 'Sistema de Gestión de Taller',
+                    marca: mantData.marca_vehiculo,
+                    modelo: mantData.modelo_vehiculo,
+                    placa: placa,
+                    tipo: 'Recepción de vehículo',
+                    descripcion: `Su vehículo ha sido recibido en el taller. Orden: ${codigoOrden}`,
+                    estado: 'pendiente',
+                    valor_total: mantData.valor_total,
+                    fecha_estimada: mantData.fecha_estimada_entrega
+                });
+
+            } catch (error) {
+                console.error('Error en notificación de recepción:', error);
+            }
+        }
+
+        // ============================================
+        // EVENTO 2: VEHÍCULO LISTO PARA ENTREGA
+        // ============================================
+        async function notificarVehiculoListo(mantenimientoId, nombreCliente, placa, estadoFinal) {
+            try {
+                // Verificar duplicados
+                const esDuplicado = await verificarNotificacionDuplicada('vehiculo_listo', mantenimientoId);
+                if (esDuplicado) {
+                    console.log('Ya existe notificación de vehículo listo para este mantenimiento');
+                    return;
+                }
+
+                // Obtener correo del propietario
+                const mantDoc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId)
+                );
+                const mantData = mantDoc.data();
+                const correo = await obtenerCorreoPropietario(mantData.vehiculo_id);
+
+                if (!correo) {
+                    console.error('No se encontró correo del propietario');
+                    return;
+                }
+
+                // Crear notificación en Firestore
+                const notificacionData = {
+                    destinatario: correo,
+                    nombre_destinatario: nombreCliente,
+                    canal_comunicacion: 'email',
+                    evento: 'vehiculo_listo',
+                    mensaje: {
+                        nombre_cliente: nombreCliente,
+                        placa: placa,
+                        estado_final: estadoFinal,
+                        disponibilidad_retiro: 'Listo para retiro'
+                    },
+                    fecha_generacion: new Date().toISOString(),
+                    estado_envio: 'pendiente',
+                    mantenimiento_id: mantenimientoId,
+                    tipo_notificacion: 'listo_entrega'
+                };
+
+                const docRef = await window.firestoreAddDoc(
+                    window.firestoreCollection(window.firestoreDB, 'notificaciones'),
+                    notificacionData
+                );
+
+                // Enviar email
+                await enviarNotificacionYActualizarEstado(docRef.id, correo, EMAILJS_TEMPLATE_MANTENIMIENTO, {
+                    to_email: correo,
+                    to_name: nombreCliente,
+                    from_name: 'Sistema de Gestión de Taller',
+                    marca: mantData.marca_vehiculo,
+                    modelo: mantData.modelo_vehiculo,
+                    placa: placa,
+                    tipo: 'Vehículo listo para entrega',
+                    descripcion: 'Su vehículo está listo para ser retirado del taller.',
+                    estado: estadoFinal,
+                    valor_total: mantData.valor_total,
+                    fecha_estimada: 'Listo para retiro'
+                });
+
+            } catch (error) {
+                console.error('Error en notificación de vehículo listo:', error);
+            }
+        }
+
+        // ============================================
+        // EVENTO 3: INFORMACIÓN DE PAGO
+        // ============================================
+        async function notificarInformacionPago(mantenimientoId, nombreCliente, serviciosRealizados, valorTotal) {
+            try {
+                // Verificar duplicados
+                const esDuplicado = await verificarNotificacionDuplicada('informacion_pago', mantenimientoId);
+                if (esDuplicado) {
+                    console.log('Ya existe notificación de pago para este mantenimiento');
+                    return;
+                }
+
+                // Obtener correo del propietario
+                const mantDoc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId)
+                );
+                const mantData = mantDoc.data();
+                const correo = await obtenerCorreoPropietario(mantData.vehiculo_id);
+
+                if (!correo) {
+                    console.error('No se encontró correo del propietario');
+                    return;
+                }
+
+                // Crear notificación en Firestore
+                const notificacionData = {
+                    destinatario: correo,
+                    nombre_destinatario: nombreCliente,
+                    canal_comunicacion: 'email',
+                    evento: 'informacion_pago',
+                    mensaje: {
+                        numero_orden: mantData.codigo,
+                        servicios_realizados: serviciosRealizados,
+                        valor_total: valorTotal
+                    },
+                    fecha_generacion: new Date().toISOString(),
+                    estado_envio: 'pendiente',
+                    mantenimiento_id: mantenimientoId,
+                    tipo_notificacion: 'pago'
+                };
+
+                const docRef = await window.firestoreAddDoc(
+                    window.firestoreCollection(window.firestoreDB, 'notificaciones'),
+                    notificacionData
+                );
+
+                // Enviar email
+                await enviarNotificacionYActualizarEstado(docRef.id, correo, EMAILJS_TEMPLATE_MANTENIMIENTO, {
+                    to_email: correo,
+                    to_name: nombreCliente,
+                    from_name: 'Sistema de Gestión de Taller',
+                    marca: mantData.marca_vehiculo,
+                    modelo: mantData.modelo_vehiculo,
+                    placa: mantData.placa_vehiculo,
+                    tipo: 'Información de pago',
+                    descripcion: `Servicios: ${serviciosRealizados}`,
+                    estado: 'pendiente',
+                    valor_total: valorTotal,
+                    fecha_estimada: 'Información de pago'
+                });
+
+            } catch (error) {
+                console.error('Error en notificación de pago:', error);
+            }
+        }
+
         // Mostrar sección
         function showSection(section) {
             document.getElementById('section-lista').classList.add('hidden');
             document.getElementById('section-crear').classList.add('hidden');
+            document.getElementById('section-vehiculos').classList.add('hidden');
+            document.getElementById('section-nuevo-vehiculo').classList.add('hidden');
             document.getElementById('btn-lista').classList.remove('active');
             document.getElementById('btn-crear').classList.remove('active');
-            
+            document.getElementById('btn-vehiculos').classList.remove('active');
+            document.getElementById('btn-nuevo-vehiculo').classList.remove('active');
+
             document.getElementById('section-' + section).classList.remove('hidden');
             document.getElementById('btn-' + section).classList.add('active');
-            
+
             if (section === 'lista') {
-                cargarUsuarios();
+                cargarClientes();
+            } else if (section === 'crear') {
+                resetFormulario();
+            } else if (section === 'vehiculos') {
+                cargarVehiculos();
+            } else if (section === 'nuevo-vehiculo') {
+                cargarPropietarios();
             }
+        }
+
+        // Esperar a que Firebase esté inicializado
+        function esperarFirebaseInicializado() {
+            return new Promise((resolve) => {
+                const checkInterval = setInterval(() => {
+                    if (window.firestoreDB && window.clientesRef) {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }
+                }, 100);
+            });
         }
 
         // Mostrar alerta
@@ -290,110 +1417,1233 @@
             const alertElement = document.getElementById(alertId);
             alertElement.textContent = message;
             alertElement.style.display = 'block';
-            
+
             setTimeout(() => {
                 alertElement.style.display = 'none';
             }, 3000);
         }
 
-        // Cargar usuarios desde Firestore
-        async function cargarUsuarios() {
+        // Cargar clientes desde Firestore
+        async function cargarClientes() {
             const loading = document.getElementById('loading');
             const tablaContainer = document.getElementById('tabla-container');
             const tablaBody = document.getElementById('tabla-body');
             const noUsuarios = document.getElementById('no-usuarios');
-            
+
             loading.classList.remove('hidden');
             tablaContainer.classList.add('hidden');
-            
+
             try {
-                const querySnapshot = await window.firestoreGetDocs(window.usuariosRef);
+                await esperarFirebaseInicializado();
+                const querySnapshot = await window.firestoreGetDocs(window.clientesRef);
+                clientesData.clientes = [];
                 tablaBody.innerHTML = '';
-                
+
                 if (querySnapshot.empty) {
                     noUsuarios.classList.remove('hidden');
                     document.getElementById('tabla-usuarios').classList.add('hidden');
                 } else {
                     noUsuarios.classList.add('hidden');
                     document.getElementById('tabla-usuarios').classList.remove('hidden');
-                    
+
                     querySnapshot.forEach((doc) => {
-                        const data = doc.data();
+                        const cliente = doc.data();
+                        cliente.id = doc.id;
+                        clientesData.clientes.push(cliente);
+
                         const row = document.createElement('tr');
+
+                        // Adaptar para estructura antigua (nombre, telefono, vehiculo)
+                        // Estructura nueva (nombres, apellidos, identificacion, etc.)
+                        const nombreCompleto = cliente.nombres && cliente.apellidos
+                            ? `${cliente.nombres} ${cliente.apellidos}`
+                            : (cliente.nombre || 'Sin nombre');
+
+                        const identificacion = cliente.identificacion || '-';
+                        const telefono = cliente.telefono || '-';
+                        const correo = cliente.correo || '-';
+
+                        // Adaptar vehículos (array o objeto único) - separar vehículo y matrícula
+                        let vehiculoText = '-';
+                        let matriculaText = '-';
+
+                        if (cliente.vehiculos && Array.isArray(cliente.vehiculos)) {
+                            // Formato nuevo: array de vehículos (mostrar el primero)
+                            if (cliente.vehiculos.length > 0) {
+                                const v = cliente.vehiculos[0];
+                                vehiculoText = `${v.marca} ${v.modelo}`;
+                                matriculaText = v.patente;
+                            }
+                        } else if (cliente.vehiculo) {
+                            // Formato antiguo: objeto único
+                            vehiculoText = `${cliente.vehiculo.marca} ${cliente.vehiculo.modelo}`;
+                            matriculaText = cliente.vehiculo.patente;
+                        }
+
                         row.innerHTML = `
-                            <td>${data.nombre}</td>
-                            <td>${data.telefono}</td>
-                            <td>${data.vehiculo.marca} ${data.vehiculo.modelo} (${data.vehiculo.anio})</td>
-                            <td>${data.vehiculo.patente}</td>
+                            <td>${nombreCompleto}</td>
+                            <td>${identificacion}</td>
+                            <td>${telefono}</td>
+                            <td>${correo}</td>
+                            <td>${vehiculoText}</td>
+                            <td>${matriculaText}</td>
                             <td>
-                                <span style="color: ${data.estado === 'activo' ? 'green' : 'red'}; font-weight: bold;">
-                                    ${data.estado.charAt(0).toUpperCase() + data.estado.slice(1)}
+                                <span style="color: ${cliente.estado === 'activo' ? 'green' : 'red'}; font-weight: bold;">
+                                    ${cliente.estado.charAt(0).toUpperCase() + cliente.estado.slice(1)}
                                 </span>
                             </td>
                             <td>
-                                <button class="btn btn-danger" onclick="eliminarUsuario('${doc.id}')">Eliminar</button>
+                                <button class="btn btn-danger" onclick="eliminarCliente('${cliente.id}')">Eliminar</button>
                             </td>
                         `;
                         tablaBody.appendChild(row);
                     });
                 }
-                
+
                 loading.classList.add('hidden');
                 tablaContainer.classList.remove('hidden');
             } catch (error) {
-                console.error('Error al cargar usuarios:', error);
-                showAlert('Error al cargar usuarios: ' + error.message, 'error');
+                console.error('Error al cargar clientes:', error);
+                showAlert('Error al cargar clientes: ' + error.message, 'error');
                 loading.classList.add('hidden');
             }
         }
 
-        // Crear usuario
+        // Agregar vehículo al formulario
+        function agregarVehiculo() {
+            contadorVehiculos++;
+            const container = document.getElementById('vehiculos-container');
+            const vehiculoDiv = document.createElement('div');
+            vehiculoDiv.className = 'vehiculo-item';
+            vehiculoDiv.style.marginTop = '20px';
+            vehiculoDiv.style.paddingTop = '20px';
+            vehiculoDiv.style.borderTop = '1px solid #ddd';
+
+            // Crear elementos con IDs únicos
+            const marcaId = `marca-${contadorVehiculos}`;
+            const modeloId = `modelo-${contadorVehiculos}`;
+            const anioId = `anio-${contadorVehiculos}`;
+            const patenteId = `patente-${contadorVehiculos}`;
+
+            vehiculoDiv.innerHTML = `
+                <h4>Vehículo ${contadorVehiculos + 1}</h4>
+                <div class="form-group">
+                    <label>Marca:</label>
+                    <input type="text" class="marca" id="${marcaId}" required placeholder="Ej: Toyota">
+                </div>
+                <div class="form-group">
+                    <label>Modelo:</label>
+                    <input type="text" class="modelo" id="${modeloId}" required placeholder="Ej: Corolla">
+                </div>
+                <div class="form-group">
+                    <label>Año:</label>
+                    <input type="number" class="anio" id="${anioId}" required min="1900" max="2030" placeholder="Ej: 2020">
+                </div>
+                <div class="form-group">
+                    <label>Patente:</label>
+                    <input type="text" class="patente" id="${patenteId}" required placeholder="Ej: ABC-123">
+                </div>
+                <button type="button" onclick="eliminarVehiculo(this)" class="btn btn-danger" style="margin-top: 10px;">Eliminar Vehículo</button>
+            `;
+            container.appendChild(vehiculoDiv);
+        }
+
+        // Eliminar vehículo del formulario
+        function eliminarVehiculo(button) {
+            const vehiculoItem = button.closest('.vehiculo-item');
+            if (document.querySelectorAll('.vehiculo-item').length > 1) {
+                vehiculoItem.remove();
+                contadorVehiculos--;
+            } else {
+                showAlert('Debe haber al menos un vehículo', 'error');
+            }
+        }
+
+        // Resetear formulario
+        function resetFormulario() {
+            document.getElementById('form-usuario').reset();
+        }
+
+        // Crear cliente
         document.getElementById('form-usuario').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const nombre = document.getElementById('nombre').value;
+            console.log('Formulario de cliente enviado');
+
+            await esperarFirebaseInicializado();
+
+            const nombres = document.getElementById('nombres').value;
+            const apellidos = document.getElementById('apellidos').value;
+            const identificacion = document.getElementById('identificacion').value;
             const telefono = document.getElementById('telefono').value;
-            const marca = document.getElementById('marca').value;
-            const modelo = document.getElementById('modelo').value;
-            const anio = parseInt(document.getElementById('anio').value);
-            const patente = document.getElementById('patente').value;
-            
+            const correo = document.getElementById('correo').value;
+            const direccion = document.getElementById('direccion').value;
+            const medio_notificacion = document.getElementById('medio_notificacion').value;
+
+            console.log('Datos personales:', { nombres, apellidos, identificacion, telefono, correo, direccion });
+
+            // Generar contraseña aleatoria de 6 dígitos
+            const contrasena = generarContrasena();
+            console.log('Contraseña generada:', contrasena);
+
+            const nuevoCliente = {
+                nombres,
+                apellidos,
+                identificacion,
+                telefono,
+                correo,
+                direccion,
+                medio_notificacion,
+                vehiculos: [], // Los vehículos se registran desde el módulo "Nuevo Vehículo"
+                contrasena,
+                fecha_registro: new Date().toISOString(),
+                estado: 'activo'
+            };
+
             try {
-                await window.firestoreAddDoc(window.usuariosRef, {
-                    nombre: nombre,
-                    telefono: telefono,
-                    vehiculo: {
-                        marca: marca,
-                        modelo: modelo,
-                        anio: anio,
-                        patente: patente
-                    },
-                    fecha_registro: new Date().toISOString(),
-                    estado: 'activo'
-                });
-                
-                showAlert('Usuario creado exitosamente', 'success');
+                // Crear usuario en Firebase Authentication con la contraseña generada
+                let userCredential;
+                try {
+                    userCredential = await window.authCreateUser(window.firestoreAuth, correo, contrasena);
+                    console.log('Usuario de Authentication creado exitosamente');
+                } catch (authError) {
+                    if (authError.code === 'auth/email-already-in-use') {
+                        console.log('El email ya existe en Authentication, se usará la contraseña existente');
+                        // El usuario ya existe, usamos la contraseña existente
+                    } else {
+                        throw authError;
+                    }
+                }
+
+                // Guardar en la colección 'usuarios' (para compatibilidad con datos existentes)
+                const usuariosRef = window.firestoreCollection(window.firestoreDB, 'usuarios');
+                await window.firestoreAddDoc(usuariosRef, nuevoCliente);
+                console.log('Cliente guardado exitosamente');
+
+                // Guardar rol en users_auth
+                try {
+                    const usersAuthRef = window.firestoreCollection(window.firestoreDB, 'users_auth');
+                    if (userCredential) {
+                        await window.firestoreSetDoc(window.firestoreDoc(window.firestoreDB, 'users_auth', userCredential.user.uid), {
+                            email: correo,
+                            rol: 'usuario',
+                            cliente_id: '' // Se llenará después si se necesita
+                        });
+                    }
+                } catch (error) {
+                    console.log('Error al guardar rol:', error);
+                }
+
+                // Enviar contraseña por correo
+                const emailEnviado = await enviarContrasenaPorCorreo(correo, contrasena, nombres);
+                if (emailEnviado) {
+                    showAlert(`Cliente registrado exitosamente. Contraseña enviada a ${correo}`, 'success');
+                } else {
+                    showAlert(`Cliente registrado exitosamente. CONTRASEÑA: ${contrasena} (No se pudo enviar el correo)`, 'success');
+                }
+
                 document.getElementById('form-usuario').reset();
+                resetFormulario();
                 showSection('lista');
             } catch (error) {
-                console.error('Error al crear usuario:', error);
-                showAlert('Error al crear usuario: ' + error.message, 'error');
+                console.error('Error al crear cliente:', error);
+                if (error.code === 'permission-denied' || error.code === 'unavailable') {
+                    showAlert('Error de permisos: Las reglas de Firestore no permiten escritura. Agrega la regla de users_auth en Firebase Console.', 'error');
+                } else {
+                    showAlert('Error al crear cliente: ' + error.message, 'error');
+                }
             }
         });
 
-        // Eliminar usuario
-        async function eliminarUsuario(usuarioId) {
-            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+        // Eliminar cliente (con eliminación en cascada de vehículos y mantenimientos)
+        async function eliminarCliente(clienteId) {
+            if (confirm('¿Estás seguro de eliminar este cliente?\n\nEsta acción también eliminará todos sus vehículos y mantenimientos asociados.')) {
                 try {
-                    await window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'usuarios', usuarioId));
-                    showAlert('Usuario eliminado exitosamente', 'success');
-                    cargarUsuarios();
+                    // 1. Buscar todos los vehículos de este cliente
+                    const vehiculosSnap = await window.firestoreGetDocs(window.vehiculosRef);
+                    const vehiculosDelCliente = [];
+                    vehiculosSnap.forEach((docVehiculo) => {
+                        if (docVehiculo.data().propietario_id === clienteId) {
+                            vehiculosDelCliente.push(docVehiculo.id);
+                        }
+                    });
+
+                    // 2. Por cada vehículo, buscar y eliminar sus mantenimientos
+                    const mantenimientosSnap = await window.firestoreGetDocs(window.mantenimientosRef);
+                    const eliminarMantenimientos = [];
+                    mantenimientosSnap.forEach((docMant) => {
+                        if (vehiculosDelCliente.includes(docMant.data().vehiculo_id)) {
+                            eliminarMantenimientos.push(
+                                window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'mantenimientos', docMant.id))
+                            );
+                        }
+                    });
+                    await Promise.all(eliminarMantenimientos);
+
+                    // 3. Eliminar todos los vehículos del cliente
+                    const eliminarVehiculos = vehiculosDelCliente.map((vehiculoId) =>
+                        window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'vehiculos', vehiculoId))
+                    );
+                    await Promise.all(eliminarVehiculos);
+
+                    // 4. Finalmente eliminar el cliente
+                    await window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'usuarios', clienteId));
+
+                    showAlert(`Cliente eliminado exitosamente junto con ${vehiculosDelCliente.length} vehículo(s) y ${eliminarMantenimientos.length} mantenimiento(s) asociados.`, 'success');
+                    cargarClientes();
                 } catch (error) {
-                    console.error('Error al eliminar usuario:', error);
-                    showAlert('Error al eliminar usuario: ' + error.message, 'error');
+                    console.error('Error al eliminar cliente:', error);
+                    showAlert('Error al eliminar cliente: ' + error.message, 'error');
                 }
             }
         }
+
+        // ==================== SISTEMA DE AUTENTICACIÓN ====================
+
+        // Mostrar sección (actualizado para incluir login/registro)
+        function showSection(section) {
+            // Ocultar todas las secciones
+            document.getElementById('section-login').classList.add('hidden');
+            document.getElementById('section-registro').classList.add('hidden');
+            document.getElementById('section-lista').classList.add('hidden');
+            document.getElementById('section-crear').classList.add('hidden');
+            document.getElementById('section-vehiculos').classList.add('hidden');
+            document.getElementById('section-nuevo-vehiculo').classList.add('hidden');
+            document.getElementById('section-mantenimientos').classList.add('hidden');
+            document.getElementById('section-nuevo-mantenimiento').classList.add('hidden');
+            document.getElementById('section-seguimiento').classList.add('hidden');
+            document.getElementById('section-config-visibilidad').classList.add('hidden');
+            document.getElementById('section-mis-vehiculos').classList.add('hidden');
+            document.getElementById('section-agregar-vehiculo').classList.add('hidden');
+
+            // Desactivar todos los botones
+            document.getElementById('btn-lista').classList.remove('active');
+            document.getElementById('btn-crear').classList.remove('active');
+            document.getElementById('btn-vehiculos').classList.remove('active');
+            document.getElementById('btn-nuevo-vehiculo').classList.remove('active');
+            document.getElementById('btn-mantenimientos').classList.remove('active');
+            document.getElementById('btn-nuevo-mantenimiento').classList.remove('active');
+            document.getElementById('btn-seguimiento').classList.remove('active');
+            document.getElementById('btn-config-visibilidad').classList.remove('active');
+            document.getElementById('btn-mis-vehiculos').classList.remove('active');
+            document.getElementById('btn-agregar-vehiculo').classList.remove('active');
+
+            // Mostrar sección correspondiente
+            document.getElementById('section-' + section).classList.remove('hidden');
+
+            // Activar botón correspondiente
+            const btn = document.getElementById('btn-' + section);
+            if (btn) btn.classList.add('active');
+
+            // Cargar datos según sección
+            if (section === 'lista') {
+                cargarClientes();
+            } else if (section === 'crear') {
+                resetFormulario();
+            } else if (section === 'vehiculos') {
+                cargarVehiculos();
+            } else if (section === 'nuevo-vehiculo') {
+                cargarPropietarios();
+            } else if (section === 'mis-vehiculos') {
+                cargarMisVehiculos();
+            } else if (section === 'mantenimientos') {
+                cargarMantenimientos();
+            } else if (section === 'nuevo-mantenimiento') {
+                cargarVehiculosParaMantenimiento();
+                // Agregar event listeners para cálculo automático
+                setTimeout(() => {
+                    const manoObraInput = document.getElementById('mant-mano_obra');
+                    const costoRepuestosInput = document.getElementById('mant-costo_repuestos');
+                    const impuestosInput = document.getElementById('mant-impuestos');
+
+                    if (manoObraInput) manoObraInput.addEventListener('input', calcularValorTotalMantenimiento);
+                    if (costoRepuestosInput) costoRepuestosInput.addEventListener('input', calcularValorTotalMantenimiento);
+                    if (impuestosInput) impuestosInput.addEventListener('input', calcularValorTotalMantenimiento);
+                }, 100);
+            } else if (section === 'seguimiento') {
+                cargarSeguimiento();
+            } else if (section === 'config-visibilidad') {
+                cargarUsuariosParaVisibilidad();
+            }
+        }
+
+        // Login
+        document.getElementById('form-login').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const userCredential = await window.authSignIn(window.firestoreAuth, email, password);
+                currentUser = userCredential.user;
+
+                // Obtener rol del usuario desde Firestore
+                try {
+                    const userDoc = await window.firestoreGetDoc(window.firestoreDoc(window.firestoreDB, 'users_auth', currentUser.uid));
+                    if (userDoc.exists()) {
+                        userRole = userDoc.data().rol;
+                    } else {
+                        // Si no tiene rol asignado, asignar 'usuario' por defecto
+                        userRole = 'usuario';
+                        await window.firestoreSetDoc(window.firestoreDoc(window.firestoreDB, 'users_auth', currentUser.uid), {
+                            email: email,
+                            rol: 'usuario'
+                        });
+                    }
+                } catch (firestoreError) {
+                    console.error('Error al obtener rol de Firestore:', firestoreError);
+                    userRole = 'usuario'; // Rol por defecto si hay error
+                }
+
+                showAlert('Sesión iniciada correctamente', 'success');
+                mostrarVistaSegunRol();
+            } catch (error) {
+                console.error('Error al iniciar sesión:', error);
+                if (error.code === 'auth/invalid-credential') {
+                    showAlert('Email o contraseña incorrectos', 'error');
+                } else {
+                    showAlert('Error al iniciar sesión: ' + error.message, 'error');
+                }
+            }
+        });
+
+        // Registro
+        document.getElementById('form-registro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const rol = document.getElementById('reg-rol').value;
+
+            try {
+                const userCredential = await window.authCreateUser(window.firestoreAuth, email, password);
+                currentUser = userCredential.user;
+                userRole = rol;
+
+                // Guardar rol en Firestore
+                await window.firestoreSetDoc(window.firestoreDoc(window.firestoreDB, 'users_auth', currentUser.uid), {
+                    email: email,
+                    rol: rol
+                });
+
+                showAlert('Usuario registrado correctamente', 'success');
+                mostrarVistaSegunRol();
+            } catch (error) {
+                console.error('Error al registrar usuario:', error);
+                if (error.code === 'auth/email-already-in-use') {
+                    showAlert('Este email ya está registrado. Inicia sesión o elimina el usuario en Firebase Console para volver a registrarlo.', 'error');
+                } else {
+                    showAlert('Error al registrar usuario: ' + error.message, 'error');
+                }
+            }
+        });
+
+        // Logout
+        async function logout() {
+            try {
+                await window.authSignOut(window.firestoreAuth);
+                currentUser = null;
+                userRole = null;
+                showAlert('Sesión cerrada', 'success');
+                showSection('login');
+                document.getElementById('nav-admin').classList.add('hidden');
+                document.getElementById('nav-usuario').classList.add('hidden');
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                showAlert('Error al cerrar sesión: ' + error.message, 'error');
+            }
+        }
+
+        // Mostrar vista según rol
+        function mostrarVistaSegunRol() {
+            if (userRole === 'admin') {
+                document.getElementById('nav-admin').classList.remove('hidden');
+                document.getElementById('nav-usuario').classList.add('hidden');
+                showSection('lista');
+            } else {
+                document.getElementById('nav-admin').classList.add('hidden');
+                document.getElementById('nav-usuario').classList.remove('hidden');
+                showSection('mis-vehiculos');
+            }
+        }
+
+        // Cargar mis vehículos (vista de usuario)
+        async function cargarMisVehiculos() {
+            const loading = document.getElementById('loading-mis-vehiculos');
+            const tablaContainer = document.getElementById('tabla-container-mis-vehiculos');
+            const tablaBody = document.getElementById('tabla-body-mis-vehiculos');
+            const noVehiculos = document.getElementById('no-mis-vehiculos');
+
+            loading.classList.remove('hidden');
+            tablaContainer.classList.add('hidden');
+
+            try {
+                await esperarFirebaseInicializado();
+                const vehiculosRef = window.firestoreCollection(window.firestoreDB, 'vehiculos');
+                const querySnapshot = await window.firestoreGetDocs(vehiculosRef);
+                tablaBody.innerHTML = '';
+
+                // Filtrar vehículos del usuario actual (por propietario_id)
+                const misVehiculos = [];
+                querySnapshot.forEach((doc) => {
+                    const vehiculo = doc.data();
+                    // Filtrar por propietario_id (que es el UID del usuario autenticado)
+                    if (vehiculo.propietario_id === currentUser.uid) {
+                        misVehiculos.push({ id: doc.id, ...vehiculo });
+                    }
+                });
+
+                if (misVehiculos.length === 0) {
+                    noVehiculos.classList.remove('hidden');
+                    document.getElementById('tabla-mis-vehiculos').classList.add('hidden');
+                } else {
+                    noVehiculos.classList.add('hidden');
+                    document.getElementById('tabla-mis-vehiculos').classList.remove('hidden');
+
+                    // Obtener campos visibles para el usuario
+                    const camposVisibles = visibilidadUsuario && visibilidadUsuario.mis_vehiculos
+                        ? visibilidadUsuario.mis_vehiculos
+                        : VISIBILIDAD_DEFAULT.mis_vehiculos;
+
+                    // Construir cabecera de tabla dinámicamente
+                    const thead = document.querySelector('#tabla-mis-vehiculos thead tr');
+                    thead.innerHTML = '';
+                    camposVisibles.forEach(campo => {
+                        const campoInfo = CAMPOS_VISIBILIDAD.mis_vehiculos.find(c => c.id === campo);
+                        if (campoInfo) {
+                            const th = document.createElement('th');
+                            th.textContent = campoInfo.label;
+                            thead.appendChild(th);
+                        }
+                    });
+
+                    misVehiculos.forEach((vehiculo) => {
+                        const row = document.createElement('tr');
+
+                        // Mostrar solo campos visibles
+                        camposVisibles.forEach(campo => {
+                            const td = document.createElement('td');
+                            td.textContent = vehiculo[campo] !== undefined ? vehiculo[campo] : '-';
+                            row.appendChild(td);
+                        });
+
+                        tablaBody.appendChild(row);
+                    });
+                }
+
+                loading.classList.add('hidden');
+                tablaContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error al cargar mis vehículos:', error);
+                showAlert('Error al cargar vehículos: ' + error.message, 'error');
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Agregar vehículo (vista de usuario)
+        document.getElementById('form-agregar-vehiculo').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            await esperarFirebaseInicializado();
+
+            const placa = document.getElementById('uv-placa').value;
+            const marca = document.getElementById('uv-marca').value;
+            const modelo = document.getElementById('uv-modelo').value;
+            const anio = parseInt(document.getElementById('uv-anio').value);
+            const color = document.getElementById('uv-color').value;
+            const kilometraje = parseInt(document.getElementById('uv-kilometraje').value);
+            const combustible = document.getElementById('uv-combustible').value;
+            const vin = document.getElementById('uv-vin').value;
+
+            const nuevoVehiculo = {
+                propietario_id: currentUser.uid,
+                nombre_propietario: currentUser.email,
+                placa,
+                marca,
+                modelo,
+                anio,
+                color,
+                kilometraje,
+                combustible,
+                vin,
+                fecha_registro: new Date().toISOString(),
+                estado: 'activo'
+            };
+
+            try {
+                const vehiculosRef = window.firestoreCollection(window.firestoreDB, 'vehiculos');
+                await window.firestoreAddDoc(vehiculosRef, nuevoVehiculo);
+                showAlert('Vehículo agregado exitosamente', 'success');
+                document.getElementById('form-agregar-vehiculo').reset();
+                showSection('mis-vehiculos');
+            } catch (error) {
+                console.error('Error al agregar vehículo:', error);
+                showAlert('Error al agregar vehículo: ' + error.message, 'error');
+            }
+        });
+
+        // Verificar estado de autenticación al cargar
+        if (window.firestoreAuth) {
+            window.firestoreAuth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    // Obtener rol
+                    window.firestoreGetDoc(window.firestoreDoc(window.firestoreDB, 'users_auth', user.uid))
+                        .then((doc) => {
+                            if (doc.exists()) {
+                                userRole = doc.data().rol;
+                                cargarVisibilidadUsuarioActual().then(() => {
+                                    mostrarVistaSegunRol();
+                                });
+                            } else {
+                                userRole = 'usuario';
+                                cargarVisibilidadUsuarioActual().then(() => {
+                                    mostrarVistaSegunRol();
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error al obtener rol:', error);
+                            userRole = 'usuario';
+                            cargarVisibilidadUsuarioActual().then(() => {
+                                mostrarVistaSegunRol();
+                            });
+                        });
+                } else {
+                    currentUser = null;
+                    userRole = null;
+                    visibilidadUsuario = null;
+                    showSection('login');
+                }
+            });
+        } else {
+            console.error('Firebase Auth no está inicializado');
+            showSection('login');
+        }
+
+        // Cargar clientes al iniciar (solo si ya está autenticado)
+        // cargarClientes();
+
+        // Cargar propietarios para el selector
+        async function cargarPropietarios() {
+            try {
+                await esperarFirebaseInicializado();
+                const clientesRef = window.firestoreCollection(window.firestoreDB, 'usuarios');
+                const querySnapshot = await window.firestoreGetDocs(clientesRef);
+                const select = document.getElementById('propietario');
+                select.innerHTML = '<option value="">Seleccionar cliente...</option>';
+
+                querySnapshot.forEach((doc) => {
+                    const cliente = doc.data();
+                    const nombreCompleto = cliente.nombres && cliente.apellidos
+                        ? `${cliente.nombres} ${cliente.apellidos}`
+                        : (cliente.nombre || 'Sin nombre');
+
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = nombreCompleto;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar propietarios:', error);
+                showAlert('Error al cargar propietarios: ' + error.message, 'error');
+            }
+        }
+
+        // Cargar vehículos para selector de mantenimiento
+        async function cargarVehiculosParaMantenimiento() {
+            await esperarFirebaseInicializado();
+
+            const select = document.getElementById('mant-vehiculo');
+            select.innerHTML = '<option value="">Seleccionar vehículo...</option>';
+
+            try {
+                const vehiculosRef = window.firestoreCollection(window.firestoreDB, 'vehiculos');
+                const querySnapshot = await window.firestoreGetDocs(vehiculosRef);
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const descripcion = `${data.marca} ${data.modelo} (${data.placa}) - ${data.nombre_propietario}`;
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = descripcion;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar vehículos:', error);
+                showAlert('Error al cargar vehículos: ' + error.message, 'error');
+            }
+        }
+
+        // Cargar mantenimientos
+        async function cargarMantenimientos() {
+            const loading = document.getElementById('loading-mantenimientos');
+            const tablaContainer = document.getElementById('tabla-container-mantenimientos');
+            const tablaBody = document.getElementById('tabla-body-mantenimientos');
+            const noMantenimientos = document.getElementById('no-mantenimientos');
+
+            loading.classList.remove('hidden');
+            tablaContainer.classList.add('hidden');
+            noMantenimientos.classList.add('hidden');
+            tablaBody.innerHTML = '';
+
+            try {
+                await esperarFirebaseInicializado();
+                const mantenimientosRef = window.firestoreCollection(window.firestoreDB, 'mantenimientos');
+                const querySnapshot = await window.firestoreGetDocs(mantenimientosRef);
+
+                if (querySnapshot.empty) {
+                    noMantenimientos.classList.remove('hidden');
+                    loading.classList.add('hidden');
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const mant = doc.data();
+                    const row = document.createElement('tr');
+
+                    // Obtener información del vehículo
+                    const vehiculoInfo = `${mant.marca_vehiculo || ''} ${mant.modelo_vehiculo || ''} (${mant.placa_vehiculo || ''})`;
+
+                    // Determinar estado basado en fecha real de entrega
+                    const estado = mant.fecha_real_entrega ? 'Completado' : 'En proceso';
+
+                    row.innerHTML = `
+                        <td>${mant.codigo || doc.id.substring(0, 8)}</td>
+                        <td>${vehiculoInfo}</td>
+                        <td>${new Date(mant.fecha_ingreso).toLocaleDateString()}</td>
+                        <td>${mant.tipo === 'preventivo' ? 'Preventivo' : 'Correctivo'}</td>
+                        <td>${mant.descripcion || '-'}</td>
+                        <td>${mant.tecnico || '-'}</td>
+                        <td><span class="status ${estado === 'Completado' ? 'active' : 'pending'}">${estado}</span></td>
+                        <td>$${(mant.valor_total || 0).toFixed(2)}</td>
+                        <td>
+                            <button onclick="eliminarMantenimiento('${doc.id}')" class="btn btn-danger btn-sm">Eliminar</button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(row);
+                });
+
+                tablaContainer.classList.remove('hidden');
+                loading.classList.add('hidden');
+            } catch (error) {
+                console.error('Error al cargar mantenimientos:', error);
+                showAlert('Error al cargar mantenimientos: ' + error.message, 'error');
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Cargar seguimiento de estados
+        async function cargarSeguimiento() {
+            const loading = document.getElementById('loading-seguimiento');
+            const tablaContainer = document.getElementById('tabla-container-seguimiento');
+            const tablaBody = document.getElementById('tabla-body-seguimiento');
+            const noSeguimiento = document.getElementById('no-seguimiento');
+
+            loading.classList.remove('hidden');
+            tablaContainer.classList.add('hidden');
+            noSeguimiento.classList.add('hidden');
+            tablaBody.innerHTML = '';
+
+            try {
+                await esperarFirebaseInicializado();
+                const mantenimientosRef = window.firestoreCollection(window.firestoreDB, 'mantenimientos');
+                const querySnapshot = await window.firestoreGetDocs(mantenimientosRef);
+
+                if (querySnapshot.empty) {
+                    noSeguimiento.classList.remove('hidden');
+                    loading.classList.add('hidden');
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const mant = doc.data();
+                    const row = document.createElement('tr');
+
+                    const vehiculoInfo = `${mant.marca_vehiculo || ''} ${mant.modelo_vehiculo || ''} (${mant.placa_vehiculo || ''})`;
+                    const estadoVehiculo = mant.estado_vehiculo || 'pendiente';
+
+                    // Mapeo de estado a clase CSS
+                    const estadoClase = `estado-${estadoVehiculo}`;
+                    const estadoTexto = {
+                        'pendiente': '🟡 Pendiente',
+                        'diagnostico': '🔵 En diagnóstico',
+                        'reparacion': '🟠 En reparación',
+                        'repuestos': '🟣 Esperando repuestos',
+                        'listo': '🟢 Listo para entrega',
+                        'entregado': '✅ Entregado'
+                    }[estadoVehiculo] || estadoVehiculo;
+
+                    row.innerHTML = `
+                        <td>${mant.codigo || doc.id.substring(0, 8)}</td>
+                        <td>${vehiculoInfo}</td>
+                        <td>${mant.nombre_propietario || '-'}</td>
+                        <td><span class="${estadoClase}">${estadoTexto}</span></td>
+                        <td>${new Date(mant.fecha_ingreso).toLocaleDateString()}</td>
+                        <td>${mant.tecnico || '-'}</td>
+                        <td>
+                            <button onclick="actualizarEstado('${doc.id}')" class="btn btn-primary btn-sm">Actualizar Estado</button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(row);
+                });
+
+                tablaContainer.classList.remove('hidden');
+                loading.classList.add('hidden');
+            } catch (error) {
+                console.error('Error al cargar seguimiento:', error);
+                showAlert('Error al cargar seguimiento: ' + error.message, 'error');
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Actualizar estado del vehículo
+        async function actualizarEstado(mantenimientoId) {
+            const estados = [
+                { value: 'pendiente', label: '🟡 Pendiente' },
+                { value: 'diagnostico', label: '🔵 En diagnóstico' },
+                { value: 'reparacion', label: '🟠 En reparación' },
+                { value: 'repuestos', label: '🟣 Esperando repuestos' },
+                { value: 'listo', label: '🟢 Listo para entrega' },
+                { value: 'entregado', label: '✅ Entregado' }
+            ];
+
+            let opciones = 'Selecciona el nuevo estado:\n';
+            estados.forEach((estado, index) => {
+                opciones += `${index + 1}. ${estado.label}\n`;
+            });
+
+            const seleccion = prompt(opciones + '\nIngresa el número del estado:');
+            if (seleccion === null) return;
+
+            const index = parseInt(seleccion) - 1;
+            if (index < 0 || index >= estados.length) {
+                showAlert('Selección inválida', 'error');
+                return;
+            }
+
+            try {
+                // Obtener datos del mantenimiento antes de actualizar
+                const mantDoc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId)
+                );
+                const mantData = mantDoc.data();
+
+                await window.firestoreSetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId),
+                    { estado_vehiculo: estados[index].value },
+                    { merge: true }
+                );
+
+                // EVENTO 2: Notificar vehículo listo para entrega
+                if (estados[index].value === 'listo') {
+                    await notificarVehiculoListo(
+                        mantenimientoId,
+                        mantData.nombre_propietario,
+                        mantData.placa_vehiculo,
+                        estados[index].label
+                    );
+                }
+
+                // EVENTO 3: Notificar información de pago
+                if (estados[index].value === 'listo' || estados[index].value === 'entregado') {
+                    await notificarInformacionPago(
+                        mantenimientoId,
+                        mantData.nombre_propietario,
+                        mantData.servicios || 'Servicios completados',
+                        mantData.valor_total
+                    );
+                }
+
+                showAlert('Estado actualizado exitosamente', 'success');
+                cargarSeguimiento();
+            } catch (error) {
+                console.error('Error al actualizar estado:', error);
+                showAlert('Error al actualizar estado: ' + error.message, 'error');
+            }
+        }
+
+        // Cargar usuarios para configuración de visibilidad
+        async function cargarUsuariosParaVisibilidad() {
+            await esperarFirebaseInicializado();
+
+            const select = document.getElementById('visibilidad-usuario');
+            select.innerHTML = '<option value="">Seleccionar usuario...</option>';
+
+            try {
+                const usuariosRef = window.firestoreCollection(window.firestoreDB, 'usuarios');
+                const querySnapshot = await window.firestoreGetDocs(usuariosRef);
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const nombre = data.nombres && data.apellidos
+                        ? `${data.nombres} ${data.apellidos}`
+                        : (data.nombre || 'Sin nombre');
+                    const correo = data.correo || '';
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${nombre} (${correo})`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al cargar usuarios:', error);
+                showAlert('Error al cargar usuarios: ' + error.message, 'error');
+            }
+        }
+
+        // Cargar configuración de visibilidad para un usuario
+        async function cargarConfiguracionVisibilidad() {
+            const usuarioId = document.getElementById('visibilidad-usuario').value;
+            const tipo = document.getElementById('visibilidad-tipo').value;
+            const camposContainer = document.getElementById('visibilidad-checklist');
+            camposContainer.innerHTML = '';
+
+            if (!usuarioId) {
+                camposContainer.innerHTML = '<p style="color: #666;">Selecciona un usuario primero</p>';
+                return;
+            }
+
+            try {
+                await esperarFirebaseInicializado();
+                const configDoc = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'config_visibilidad', `${usuarioId}_${tipo}`)
+                );
+                let camposSeleccionados = VISIBILIDAD_DEFAULT[tipo];
+
+                if (configDoc.exists()) {
+                    camposSeleccionados = configDoc.data().campos || VISIBILIDAD_DEFAULT[tipo];
+                }
+
+                // Crear checkboxes para cada campo
+                CAMPOS_VISIBILIDAD[tipo].forEach(campo => {
+                    const label = document.createElement('label');
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    label.style.padding = '8px';
+                    label.style.backgroundColor = '#f9f9f9';
+                    label.style.borderRadius = '4px';
+                    label.style.cursor = 'pointer';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = campo.id;
+                    checkbox.checked = camposSeleccionados.includes(campo.id);
+                    checkbox.style.marginRight = '10px';
+
+                    label.appendChild(checkbox);
+                    label.appendChild(document.createTextNode(campo.label));
+                    camposContainer.appendChild(label);
+                });
+            } catch (error) {
+                console.error('Error al cargar configuración:', error);
+                showAlert('Error al cargar configuración: ' + error.message, 'error');
+            }
+        }
+
+        // Guardar configuración de visibilidad para un usuario
+        async function guardarConfiguracionVisibilidad() {
+            const usuarioId = document.getElementById('visibilidad-usuario').value;
+            const tipo = document.getElementById('visibilidad-tipo').value;
+            const checkboxes = document.querySelectorAll('#visibilidad-checklist input[type="checkbox"]');
+            const camposSeleccionados = [];
+
+            if (!usuarioId) {
+                showAlert('Debes seleccionar un usuario', 'error');
+                return;
+            }
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    camposSeleccionados.push(checkbox.value);
+                }
+            });
+
+            if (camposSeleccionados.length === 0) {
+                showAlert('Debes seleccionar al menos un campo', 'error');
+                return;
+            }
+
+            try {
+                await esperarFirebaseInicializado();
+                await window.firestoreSetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'config_visibilidad', `${usuarioId}_${tipo}`),
+                    { campos: camposSeleccionados }
+                );
+                showAlert('Configuración guardada exitosamente', 'success');
+            } catch (error) {
+                console.error('Error al guardar configuración:', error);
+                showAlert('Error al guardar configuración: ' + error.message, 'error');
+            }
+        }
+
+        // Cargar configuración de visibilidad del usuario actual
+        async function cargarVisibilidadUsuarioActual() {
+            if (!currentUser || userRole === 'admin') {
+                // Admin ve todos los campos
+                visibilidadUsuario = {
+                    mis_vehiculos: CAMPOS_VISIBILIDAD.mis_vehiculos.map(c => c.id),
+                    mis_mantenimientos: CAMPOS_VISIBILIDAD.mis_mantenimientos.map(c => c.id)
+                };
+                return;
+            }
+
+            try {
+                await esperarFirebaseInicializado();
+                visibilidadUsuario = {};
+
+                // Cargar configuración para vehículos
+                const configVehiculos = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'config_visibilidad', `${currentUser.uid}_mis_vehiculos`)
+                );
+                visibilidadUsuario.mis_vehiculos = configVehiculos.exists()
+                    ? configVehiculos.data().campos
+                    : VISIBILIDAD_DEFAULT.mis_vehiculos;
+
+                // Cargar configuración para mantenimientos
+                const configMantenimientos = await window.firestoreGetDoc(
+                    window.firestoreDoc(window.firestoreDB, 'config_visibilidad', `${currentUser.uid}_mis_mantenimientos`)
+                );
+                visibilidadUsuario.mis_mantenimientos = configMantenimientos.exists()
+                    ? configMantenimientos.data().campos
+                    : VISIBILIDAD_DEFAULT.mis_mantenimientos;
+            } catch (error) {
+                console.error('Error al cargar visibilidad:', error);
+                // Usar configuración por defecto en caso de error
+                visibilidadUsuario = VISIBILIDAD_DEFAULT;
+            }
+        }
+
+        // Filtrar objeto según campos visibles
+        function filtrarCampos(objeto, camposVisibles) {
+            const filtrado = {};
+            camposVisibles.forEach(campo => {
+                if (objeto[campo] !== undefined) {
+                    filtrado[campo] = objeto[campo];
+                }
+            });
+            return filtrado;
+        }
+
+        // Cálculo automático del valor total de mantenimiento
+        function calcularValorTotalMantenimiento() {
+            const manoObra = parseFloat(document.getElementById('mant-mano_obra').value) || 0;
+            const costoRepuestos = parseFloat(document.getElementById('mant-costo_repuestos').value) || 0;
+            const impuestos = parseFloat(document.getElementById('mant-impuestos').value) || 0;
+            const total = manoObra + costoRepuestos + impuestos;
+            document.getElementById('mant-valor_total').value = '$' + total.toFixed(2);
+        }
+
+        // Generar código único de orden de mantenimiento
+        function generarCodigoOrden() {
+            const fecha = new Date();
+            const año = fecha.getFullYear();
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const dia = String(fecha.getDate()).padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `ORD-${año}${mes}${dia}-${random}`;
+        }
+
+        // Eliminar mantenimiento
+        async function eliminarMantenimiento(mantenimientoId) {
+            if (confirm('¿Estás seguro de eliminar este mantenimiento?')) {
+                try {
+                    await window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'mantenimientos', mantenimientoId));
+                    showAlert('Mantenimiento eliminado exitosamente', 'success');
+                    cargarMantenimientos();
+                } catch (error) {
+                    console.error('Error al eliminar mantenimiento:', error);
+                    showAlert('Error al eliminar mantenimiento: ' + error.message, 'error');
+                }
+            }
+        }
+
+        // Cargar vehículos desde Firestore
+        async function cargarVehiculos() {
+            const loading = document.getElementById('loading-vehiculos');
+            const tablaContainer = document.getElementById('tabla-container-vehiculos');
+            const tablaBody = document.getElementById('tabla-body-vehiculos');
+            const noVehiculos = document.getElementById('no-vehiculos');
+
+            loading.classList.remove('hidden');
+            tablaContainer.classList.add('hidden');
+
+            try {
+                await esperarFirebaseInicializado();
+                const vehiculosRef = window.firestoreCollection(window.firestoreDB, 'vehiculos');
+                const querySnapshot = await window.firestoreGetDocs(vehiculosRef);
+                tablaBody.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    noVehiculos.classList.remove('hidden');
+                    document.getElementById('tabla-vehiculos').classList.add('hidden');
+                } else {
+                    noVehiculos.classList.add('hidden');
+                    document.getElementById('tabla-vehiculos').classList.remove('hidden');
+
+                    querySnapshot.forEach((doc) => {
+                        const vehiculo = doc.data();
+                        vehiculo.id = doc.id;
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${vehiculo.nombre_propietario || 'N/A'}</td>
+                            <td>${vehiculo.placa}</td>
+                            <td>${vehiculo.marca}</td>
+                            <td>${vehiculo.modelo}</td>
+                            <td>${vehiculo.anio}</td>
+                            <td>${vehiculo.color}</td>
+                            <td>${vehiculo.kilometraje} km</td>
+                            <td>${vehiculo.combustible}</td>
+                            <td>${vehiculo.vin}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="eliminarVehiculo('${vehiculo.id}')">Eliminar</button>
+                            </td>
+                        `;
+                        tablaBody.appendChild(row);
+                    });
+                }
+
+                loading.classList.add('hidden');
+                tablaContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error al cargar vehículos:', error);
+                showAlert('Error al cargar vehículos: ' + error.message, 'error');
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Crear vehículo
+        document.getElementById('form-vehiculo').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            await esperarFirebaseInicializado();
+
+            const propietarioId = document.getElementById('propietario').value;
+            const placa = document.getElementById('placa').value;
+            const marca = document.getElementById('v-marca').value;
+            const modelo = document.getElementById('v-modelo').value;
+            const anio = parseInt(document.getElementById('v-anio').value);
+            const color = document.getElementById('color').value;
+            const kilometraje = parseInt(document.getElementById('kilometraje').value);
+            const combustible = document.getElementById('combustible').value;
+            const vin = document.getElementById('vin').value;
+
+            // Obtener nombre del propietario
+            const propietarioDoc = await window.firestoreGetDoc(window.firestoreDoc(window.firestoreDB, 'usuarios', propietarioId));
+            const propietarioData = propietarioDoc.data();
+            const nombrePropietario = propietarioData.nombres && propietarioData.apellidos
+                ? `${propietarioData.nombres} ${propietarioData.apellidos}`
+                : (propietarioData.nombre || 'Sin nombre');
+
+            const nuevoVehiculo = {
+                propietario_id: propietarioId,
+                nombre_propietario: nombrePropietario,
+                placa,
+                marca,
+                modelo,
+                anio,
+                color,
+                kilometraje,
+                combustible,
+                vin,
+                fecha_registro: new Date().toISOString(),
+                estado: 'activo'
+            };
+
+            try {
+                const vehiculosRef = window.firestoreCollection(window.firestoreDB, 'vehiculos');
+                await window.firestoreAddDoc(vehiculosRef, nuevoVehiculo);
+                showAlert('Vehículo registrado exitosamente', 'success');
+                document.getElementById('form-vehiculo').reset();
+                showSection('vehiculos');
+            } catch (error) {
+                console.error('Error al crear vehículo:', error);
+                showAlert('Error al crear vehículo: ' + error.message, 'error');
+            }
+        });
+
+        // Eliminar vehículo
+        async function eliminarVehiculo(vehiculoId) {
+            if (confirm('¿Estás seguro de eliminar este vehículo?')) {
+                try {
+                    await window.firestoreDeleteDoc(window.firestoreDoc(window.firestoreDB, 'vehiculos', vehiculoId));
+                    showAlert('Vehículo eliminado exitosamente', 'success');
+                    cargarVehiculos();
+                } catch (error) {
+                    console.error('Error al eliminar vehículo:', error);
+                    showAlert('Error al eliminar vehículo: ' + error.message, 'error');
+                }
+            }
+        }
+
+        // Registrar mantenimiento
+        document.getElementById('form-mantenimiento').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            await esperarFirebaseInicializado();
+
+            const vehiculoId = document.getElementById('mant-vehiculo').value;
+            const tipo = document.getElementById('mant-tipo').value;
+            const descripcion = document.getElementById('mant-descripcion').value;
+            const diagnostico = document.getElementById('mant-diagnostico').value;
+            const tecnico = document.getElementById('mant-tecnico').value;
+            const servicios = document.getElementById('mant-servicios').value;
+            const repuestos = document.getElementById('mant-repuestos').value;
+            const manoObra = parseFloat(document.getElementById('mant-mano_obra').value);
+            const costoRepuestos = parseFloat(document.getElementById('mant-costo_repuestos').value);
+            const impuestos = parseFloat(document.getElementById('mant-impuestos').value);
+            const fechaEstimada = document.getElementById('mant-fecha_estimada').value;
+            const fechaReal = document.getElementById('mant-fecha_real').value;
+
+            // Calcular valor total
+            const valorTotal = manoObra + costoRepuestos + impuestos;
+
+            // Obtener información del vehículo
+            const vehiculoDoc = await window.firestoreGetDoc(window.firestoreDoc(window.firestoreDB, 'vehiculos', vehiculoId));
+            const vehiculoData = vehiculoDoc.data();
+
+            const nuevoMantenimiento = {
+                codigo: generarCodigoOrden(),
+                vehiculo_id: vehiculoId,
+                marca_vehiculo: vehiculoData.marca,
+                modelo_vehiculo: vehiculoData.modelo,
+                placa_vehiculo: vehiculoData.placa,
+                nombre_propietario: vehiculoData.nombre_propietario,
+                fecha_ingreso: new Date().toISOString(),
+                tipo,
+                descripcion,
+                diagnostico,
+                tecnico,
+                servicios,
+                repuestos,
+                costo_mano_obra: manoObra,
+                costo_repuestos: costoRepuestos,
+                impuestos,
+                valor_total: valorTotal,
+                fecha_estimada_entrega: fechaEstimada,
+                fecha_real_entrega: fechaReal || null,
+                estado_vehiculo: document.getElementById('mant-estado').value
+            };
+
+            try {
+                const mantenimientosRef = window.firestoreCollection(window.firestoreDB, 'mantenimientos');
+                const docRef = await window.firestoreAddDoc(mantenimientosRef, nuevoMantenimiento);
+                
+                // EVENTO 1: Notificar recepción del vehículo
+                await notificarRecepcionVehiculo(
+                    docRef.id,
+                    vehiculoData.nombre_propietario,
+                    vehiculoData.placa,
+                    nuevoMantenimiento.fecha_ingreso,
+                    nuevoMantenimiento.codigo
+                );
+                
+                showAlert('Mantenimiento registrado exitosamente', 'success');
+                document.getElementById('form-mantenimiento').reset();
+                showSection('mantenimientos');
+            } catch (error) {
+                console.error('Error al registrar mantenimiento:', error);
+                showAlert('Error al registrar mantenimiento: ' + error.message, 'error');
+            }
+        });
     </script>
 </body>
 </html>

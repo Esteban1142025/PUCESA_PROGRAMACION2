@@ -1,46 +1,15 @@
-# Panel Web Administrativo - Mecánica
+# Sistema de Gestión de Taller Automotriz
 
-Panel web administrativo básico para gestionar usuarios/clientes conectado directamente a Firebase Firestore usando JavaScript.
+Sistema web para gestionar clientes, vehículos y mantenimientos de un taller automotriz.
 
-## Características
+## Comenzar
 
-- Registro de usuarios con datos personales y de vehículo
-- Lista de usuarios registrados
-- Eliminación de usuarios
-- Interfaz simple y responsiva
-- Conexión en tiempo real con Firebase Firestore
-- **Sin servidor backend** - Todo corre en el navegador
+1. **Configura Firebase** (si aún no lo has hecho):
+   - Ve a [Firebase Console](https://console.firebase.google.com/)
+   - Crea un proyecto y habilita Firestore Database
+   - Habilita Authentication (Email/Password)
 
-## Estructura del Proyecto
-
-```
-Proyecto mecanica/
-├── index.html                    # Aplicación completa (HTML + CSS + JS)
-├── FIREBASE_STRUCTURE.md         # Documentación de estructura de Firestore
-└── README.md                     # Este archivo
-```
-
-## Requisitos Previos
-
-1. **Navegador web moderno** (Chrome, Firefox, Edge, Safari)
-2. **Cuenta de Firebase** (gratuita en firebase.google.com)
-3. **Proyecto de Firebase** creado
-
-## Configuración de Firebase
-
-### 1. Crear Proyecto en Firebase
-
-1. Ve a [Firebase Console](https://console.firebase.google.com/)
-2. Crea un nuevo proyecto o selecciona uno existente
-3. Habilita **Firestore Database**:
-   - Ve a "Build" → "Firestore Database"
-   - Crea la base de datos
-   - Selecciona "Start in test mode" (para desarrollo)
-
-### 2. Configurar Reglas de Firestore
-
-En Firebase Console → Firestore Database → Rules, pega:
-
+2. **Configura las reglas de Firestore** en Firebase Console → Firestore Database → Rules:
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -48,152 +17,124 @@ service cloud.firestore {
     match /usuarios/{userId} {
       allow read, write: if true;
     }
+    match /vehiculos/{vehiculoId} {
+      allow read, write: if true;
+    }
+    match /users_auth/{userId} {
+      allow read, write: if true;
+    }
+    match /mantenimientos/{mantenimientoId} {
+      allow read, write: if true;
+    }
+    match /config_visibilidad/{configId} {
+      allow read, write: if true;
+    }
+    match /notificaciones/{notificacionId} {
+      allow read, write: if true;
+    }
   }
 }
 ```
 
-**Nota**: Estas reglas permiten lectura y escritura sin autenticación. Para producción, deberías agregar autenticación.
+3. **Configura EmailJS** (para envío de contraseñas y notificaciones):
+   - Cuenta en [EmailJS](https://www.emailjs.com/)
+   - Crea un Email Service (Gmail recomendado)
+   - Agrega tu Service ID en `index.html` (línea ~969)
 
-### 3. Verificar Configuración de Firebase
+4. **Abre el archivo** `index.html` haciendo doble clic
 
-El archivo `index.html` ya contiene tu configuración de Firebase:
+## Cómo usar
 
-```javascript
-const firebaseConfig = {
-  apiKey: "AIzaSyBRqkX5eaB2p515F9DlVPHv_OBiONO5niE",
-  authDomain: "proyecto-mecanica.firebaseapp.com",
-  projectId: "proyecto-mecanica",
-  storageBucket: "proyecto-mecanica.firebasestorage.app",
-  messagingSenderId: "806182861434",
-  appId: "1:806182861434:web:3d5f06c1c8ca94e93119c3",
-  measurementId: "G-BQ37NHDXV7"
-};
-```
+### Como Administrador
 
-## Instalación y Ejecución
+1. **Registrar primer usuario** (solo la primera vez):
+   - Haz clic en "Regístrate aquí"
+   - Ingresa email y contraseña
+   - Selecciona "Administrador"
 
-### Opción 1: Abrir directamente en el navegador
+2. **Registrar clientes:**
+   - Ve a "Nuevo Cliente"
+   - Completa los datos del cliente
+   - El sistema genera una contraseña y la envía por email
 
-1. Doble clic en `index.html`
-2. ¡Listo! La aplicación se abrirá en tu navegador
+3. **Registrar vehículos:**
+   - Ve a "Nuevo Vehículo"
+   - Selecciona el propietario
+   - Completa los datos del vehículo
 
-### Opción 2: Usar un servidor local (recomendado para desarrollo)
+4. **Registrar mantenimientos:**
+   - Ve a "Nuevo Mantenimiento"
+   - Selecciona el vehículo
+   - Completa los datos
+   - El sistema notifica al cliente automáticamente
 
-Si tienes Python instalado:
+5. **Seguimiento de estados:**
+   - Ve a "Seguimiento de Estados"
+   - Actualiza el estado del vehículo cuando progrese
+   - Al cambiar a "listo", se notifica al cliente
 
-```bash
-# Python 3
-python -m http.server 8000
-```
+6. **Configurar visibilidad de usuarios:**
+   - Ve a "Configurar Visibilidad"
+   - Selecciona un usuario
+   - Elige qué campos puede ver (vehículos/mantenimientos)
+   - El usuario solo verá esos campos cuando se loguee
 
-Luego abre: `http://localhost:8000`
+### Como Usuario (Cliente)
 
-Si tienes Node.js instalado:
+1. **Inicia sesión** con el email y contraseña que recibiste
+2. Ve a "Mis Vehículos" para ver tus vehículos
+3. Ve a "Agregar Vehículo" para registrar uno nuevo
+4. Solo verás los campos que el administrador configuró para ti
 
-```bash
-npx serve
-```
+## Funcionalidades
 
-## Uso de la Aplicación
+- **Fase 1:** Registro de clientes con datos completos
+- **Fase 2:** Registro de vehículos relacionados con clientes
+- **Fase 3:** Gestión de mantenimientos con cálculo automático de costos
+- **Fase 4:** Seguimiento del estado del vehículo (pendiente → entregado)
+- **Fase 5:** Notificaciones automáticas al cliente (recepción, listo para entrega, pago)
+- **Configuración de visibilidad:** El admin controla qué campos ve cada usuario
 
-### Registrar un Nuevo Usuario
+## Notificaciones automáticas
 
-1. Haz clic en "Nuevo Usuario" en el menú
-2. Completa los datos personales (nombre, teléfono)
-3. Completa los datos del vehículo (marca, modelo, año, patente)
-4. Haz clic en "Guardar Usuario"
+El sistema envía notificaciones al cliente en 3 momentos:
 
-### Ver Lista de Usuarios
+1. **Al registrar mantenimiento**: Notifica recepción del vehículo con número de orden
+2. **Al cambiar estado a "listo"**: Notifica que el vehículo está listo para entrega
+3. **Al cambiar estado a "listo" o "entregado"**: Notifica información de pago
 
-- La página principal muestra todos los usuarios registrados
-- Cada usuario muestra sus datos personales y del vehículo
-- Puedes eliminar usuarios con el botón "Eliminar"
+Las notificaciones se guardan en Firestore con su estado (pendiente, enviado o fallido) para seguimiento.
 
-## Estructura de Datos en Firestore
+## Responsive Design
 
-### Colección: `usuarios`
+El sistema funciona correctamente en móviles y tablets. Las tablas tienen scroll horizontal y los formularios están optimizados para pantallas pequeñas.
 
-Cada documento contiene:
+## Archivos
 
-```json
-{
-  "nombre": "Juan Pérez",
-  "telefono": "+56912345678",
-  "vehiculo": {
-    "marca": "Toyota",
-    "modelo": "Corolla",
-    "anio": 2020,
-    "patente": "ABC-123"
-  },
-  "fecha_registro": "2026-10-19T10:30:00.000Z",
-  "estado": "activo"
-}
-```
-
-Para más detalles, ver <ref_file file="C:\PUCESA_PROGRAMACION2\Proyecto mecanica\FIREBASE_STRUCTURE.md" />
+- `index.html` - Aplicación completa (HTML + CSS + JavaScript)
+- `README.md` - Este archivo
 
 ## Troubleshooting
 
-### Error: "Permission denied"
+**Error "Missing or insufficient permissions":**
+- Verifica que las reglas de Firestore incluyan todas las colecciones
+- Publica las reglas en Firebase Console
 
-- Verifica que las reglas de Firestore permitan lectura y escritura
-- Asegúrate de que Firestore esté habilitado en tu proyecto
+**Error "auth/email-already-in-use":**
+- El email ya está registrado en Firebase Authentication
+- Elimínalo en Firebase Console → Authentication → Users → Delete
 
-### Error: "FirebaseError: No Firebase App '[DEFAULT]' has been created"
+**No llegan los correos:**
+- Verifica que EmailJS esté configurado correctamente
+- Revisa el Service ID en el código
+- Verifica que los templates en EmailJS tengan las variables correctas
 
-- Verifica que las credenciales en `index.html` sean correctas
-- Asegúrate de que el proyecto de Firebase existe
+## Para desarrolladores
 
-### Los datos no se guardan
+Este sistema usa:
+- Firebase Firestore (base de datos)
+- Firebase Authentication (login)
+- EmailJS (envío de correos)
+- Arquitectura SPA sin backend
 
-- Verifica tu conexión a internet
-- Abre la consola del navegador (F12) para ver errores
-- Revisa que el proyecto de Firebase sea el correcto
-
-## Tecnologías Utilizadas
-
-- **HTML5**: Estructura de la página
-- **CSS3**: Estilos y diseño responsivo
-- **JavaScript (ES6+)**: Lógica de la aplicación
-- **Firebase Client SDK**: Conexión directa con Firestore desde el navegador
-
-## Ventajas de esta Arquitectura
-
-- **Sin servidor**: No necesitas configurar backend
-- **Fácil despliegue**: Puedes hostear en GitHub Pages, Netlify, Vercel, etc.
-- **Tiempo real**: Firebase se sincroniza automáticamente
-- **Escalable**: Firebase maneja la infraestructura
-
-## Despliegue
-
-### GitHub Pages
-
-1. Sube el archivo `index.html` a un repositorio de GitHub
-2. Ve a Settings → Pages
-3. Selecciona la rama main
-4. ¡Listo! Tu app estará en `https://tu-usuario.github.io/tu-repo`
-
-### Netlify
-
-1. Arrastra la carpeta del proyecto a [Netlify Drop](https://app.netlify.com/drop)
-2. ¡Listo! Obtendrás una URL instantánea
-
-### Firebase Hosting
-
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-firebase deploy
-```
-
-## Próximos Pasos (Futuras Mejoras)
-
-- Autenticación de administradores
-- Edición de usuarios existentes
-- Búsqueda y filtrado de usuarios
-- Exportación de datos a CSV/Excel
-- Dashboard con estadísticas
-- Historial de servicios por usuario
-- Subir fotos de vehículos
-- Notificaciones en tiempo real
+Compatible con Android Studio usando el mismo proyecto Firebase.
